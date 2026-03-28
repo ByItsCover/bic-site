@@ -22,7 +22,7 @@ jobs:
       ENVIRONMENT: prod
       TF_CLOUD_PROJECT: ByItsCover_PROD
       TF_WORKSPACE: bic-site-prod
-      TF_VAR_build_dir: ..
+      TF_VAR_build_dir: .
 
     steps:
       - name: Checkout repository
