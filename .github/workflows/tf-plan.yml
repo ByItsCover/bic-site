@@ -32,6 +32,9 @@ jobs:
         uses: hashicorp/setup-terraform@v4
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Testing file path
+        run: ls ${{ env.TF_VAR_build_dir }}
           
       - name: Terraform Init
         run: terraform init
