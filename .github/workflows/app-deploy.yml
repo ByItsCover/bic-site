@@ -34,19 +34,24 @@ jobs:
               - '**.json'
               - 'Dockerfile'
 
-  s3-deploy:
-    name: Build and Deploy
+  site-deploy:
+    name: Build and Upload
     runs-on: ubuntu-latest
     needs: check-changes
     if: needs.check-changes.outputs.should_deploy == 'true'
 
     env:
-      BUILD_DIR: ./dist
-      SITE_BUCKET: bic-site-bucket
+      CACHE_DIR: dist
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+      
+      - name: Creating cache for App build
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.CACHE_DIR }}
+          key: ${{ env.CACHE_DIR }}-key
 
       - name: Configure AWS Credentials for github actions
         uses: aws-actions/configure-aws-credentials@v6
@@ -64,15 +69,12 @@ jobs:
         run: npm install
       
       - name: Build
-        run: npm run build -- --outDir=${{ env.BUILD_DIR }}
-      
-      - name: S3 deploy
-        run: aws s3 sync ${{ env.BUILD_DIR }} s3://${{ env.SITE_BUCKET }} --delete
+        run: npm run build -- --outDir=${{ env.CACHE_DIR }}
 
   tf-apply:
     name: Terraform apply
     runs-on: ubuntu-latest
-    needs: s3-deploy
+    needs: site-deploy
     if: ${{ always() && !failure() && !cancelled() }}
 
     defaults:
@@ -83,15 +85,25 @@ jobs:
       ENVIRONMENT: prod
       TF_CLOUD_PROJECT: ByItsCover_PROD
       TF_WORKSPACE: bic-site-prod
+      TF_VAR_build_dir: dist
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+      
+      - name: Restore cached docker image
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ env.TF_VAR_build_dir }}
+          key: ${{ env.TF_VAR_build_dir }}-key
 
       - name: Hashicorp - Terraform setup
         uses: hashicorp/setup-terraform@v4
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      
+      - name: Testing Cache
+        run: ls ${{ env.TF_VAR_build_dir }}
 
       - name: Terraform Init
         run: terraform init
