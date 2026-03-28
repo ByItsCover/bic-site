@@ -22,7 +22,7 @@ jobs:
       ENVIRONMENT: prod
       TF_CLOUD_PROJECT: ByItsCover_PROD
       TF_WORKSPACE: bic-site-prod
-      TF_VAR_build_dir: .
+      TF_VAR_build_dir: ${{ github.workspace }}
 
     steps:
       - name: Checkout repository
@@ -34,7 +34,7 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Testing file path
-        run: ls ..
+        run: ls ${{ env.TF_VAR_build_dir }}
           
       - name: Terraform Init
         run: terraform init
