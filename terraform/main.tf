@@ -1,6 +1,6 @@
 locals {
   site_bucket_id = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
-  site_path      = "${var.build_dir}/${var.site_bucket_index_doc}"
+  site_path      = "${path.module}/../${var.build_dir}/${var.site_bucket_index_doc}"
 }
 
 resource "aws_s3_object" "upload_site" {
