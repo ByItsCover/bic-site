@@ -4,7 +4,7 @@ locals {
 }
 
 resource "aws_s3_object" "upload_site" {
-  for_each = fileset("${path.root}/../", "*")
+  for_each = fileset(local.site_path, "*")
 
   bucket = local.site_bucket_id
   key    = each.value
