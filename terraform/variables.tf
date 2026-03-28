@@ -22,17 +22,3 @@ variable "bic_infra_workspace" {
   type        = string
   description = "Terraform Cloud Workspace BIC-Infra name"
 }
-
-# S3
-
-variable "site_bucket_index_doc" {
-  type        = string
-  description = "Index document file name within site S3 bucket"
-  default     = "index.html"
-}
-
-variable "build_dir" {
-  type        = string
-  description = "Build directory of static site for upload"
-  default     = "."
-}
