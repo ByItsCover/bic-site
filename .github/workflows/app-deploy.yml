@@ -41,7 +41,7 @@ jobs:
     if: needs.check-changes.outputs.should_deploy == 'true'
 
     env:
-      CACHE_DIR: dist
+      CACHE_DIR: terraform/dist
 
     steps:
       - name: Checkout repository
@@ -85,7 +85,7 @@ jobs:
       ENVIRONMENT: prod
       TF_CLOUD_PROJECT: ByItsCover_PROD
       TF_WORKSPACE: bic-site-prod
-      TF_VAR_build_dir: dist
+      TF_VAR_build_dir: terraform/dist
 
     steps:
       - name: Checkout repository
