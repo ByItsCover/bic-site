@@ -44,6 +44,7 @@ jobs:
         with:
           name: ${{ env.APP_BUILD_NAME }}
           dry_run: true
+          workflow_conclusion: success
 
   site-build:
     name: Build and Upload
@@ -115,6 +116,7 @@ jobs:
         with:
           name: ${{ env.APP_BUILD_NAME }}
           path: ${{ env.BUILD_DIR }}
+          workflow_conclusion: success
 
       - name: Hashicorp - Terraform setup
         uses: hashicorp/setup-terraform@v4
