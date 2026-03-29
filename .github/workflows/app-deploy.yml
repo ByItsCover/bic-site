@@ -99,6 +99,7 @@ jobs:
 
     env:
       APP_BUILD_NAME: bic-site-build
+      BUILD_DIR: terraform/dist
       ENVIRONMENT: prod
       TF_CLOUD_PROJECT: ByItsCover_PROD
       TF_WORKSPACE: bic-site-prod
@@ -112,7 +113,7 @@ jobs:
         uses: actions/download-artifact@v6
         with:
           name: ${{ env.APP_BUILD_NAME }}
-          path: ${{ env.TF_VAR_build_dir }}
+          path: ${{ env.BUILD_DIR }}
 
       - name: Hashicorp - Terraform setup
         uses: hashicorp/setup-terraform@v4
@@ -121,9 +122,6 @@ jobs:
       
       - name: Testing Cache
         run: ls
-      
-      - name: Testing Cache
-        run: ls terraform/${{ env.TF_VAR_build_dir }}
       
       - name: Testing Cache
         run: ls ${{ env.TF_VAR_build_dir }}
