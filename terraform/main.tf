@@ -12,7 +12,7 @@ locals {
     xml         = "application/xml"
   }
 
-  files = fileset(${var.build_dir}, "**")
+  files = fileset("${var.build_dir}/", "**")
   objects = {
     for file in local.files : file => {
       content_type = lookup(local.mime_map, element(split(".", basename(file)), -1), "application/unknown")
