@@ -112,12 +112,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
       
-      - name: Downloading App build artifacts
+      - name: Downloading Old App build artifacts
         uses: dawidd6/action-download-artifact@v19
+        if: needs.site-build.result == 'skipped'
         with:
           name: ${{ env.APP_BUILD_NAME }}
           path: ${{ env.BUILD_DIR }}
           search_artifacts: true
+
+      - name: Downloading New App build artifacts
+        uses: dawidd6/action-download-artifact@v19
+        if: needs.site-build.result == 'success'
+        with:
+          name: ${{ env.APP_BUILD_NAME }}
+          path: ${{ env.BUILD_DIR }}
+          run_id: ${{ github.run_id }}
 
       - name: Hashicorp - Terraform setup
         uses: hashicorp/setup-terraform@v4
