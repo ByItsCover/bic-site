@@ -44,7 +44,8 @@ jobs:
         with:
           name: ${{ env.APP_BUILD_NAME }}
           dry_run: true
-          workflow_conclusion: success
+          if_no_artifact_found: warn
+          search_artifacts: true
 
   site-build:
     name: Build and Upload
@@ -116,7 +117,7 @@ jobs:
         with:
           name: ${{ env.APP_BUILD_NAME }}
           path: ${{ env.BUILD_DIR }}
-          workflow_conclusion: success
+          search_artifacts: true
 
       - name: Hashicorp - Terraform setup
         uses: hashicorp/setup-terraform@v4
