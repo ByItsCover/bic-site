@@ -10,6 +10,7 @@ locals {
     svg         = "image/svg+xml"
     webmanifest = "application/manifest+json"
     xml         = "application/xml"
+    onnx        = "application/onnx"
   }
 
   files = fileset("${var.build_dir}/", "**")
