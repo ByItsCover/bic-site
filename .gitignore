@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python Build (temporary)
+clenv/
+clip_model/
+
+# General
+.env
