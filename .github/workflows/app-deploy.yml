@@ -36,7 +36,8 @@ jobs:
               - '**.ts'
               - '**.js'
               - '**.json'
-              - 'Dockerfile'
+              - '**.py'
+              - '**.txt'
       
       - name: Check for build artifact
         uses: dawidd6/action-download-artifact@v19
