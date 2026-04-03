@@ -5,8 +5,8 @@ import Search from "./pages/search/Search.tsx";
 function App() {
   return (
       <Routes>
-          <Route index element={<Home />} />
-          <Route path="search" element={<Search />} />
+          <Route index element={<Search />} />
+          <Route path="home" element={<Home />} />
       </Routes>
   )
 }
