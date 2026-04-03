@@ -59,6 +59,7 @@ jobs:
       APP_BUILD_NAME: bic-site-build
       BUILD_DIR: dist
       ARTIFACT_RETENTION: 1
+      VITE_ENVIRONMENT: prod
 
     steps:
       - name: Checkout repository
@@ -70,6 +71,17 @@ jobs:
           audience: sts.amazonaws.com
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_GITHUB_ROLE }}
+      
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.13
+      
+      - name: Install Model dependencies
+        run: python -m pip install -r build_requirements.txt
+      
+      - name: Build Model
+        run: python download_model.py public/
       
       - name: Setup Node
         uses: actions/setup-node@v6
