@@ -192,4 +192,4 @@ if __name__ == "__main__":
 
     destination = os.path.join(sys.argv[1], "clip_model")
     hf_download(destination)
-    quantized_download(destination, clean_cache=False)
+    quantized_download(destination)
