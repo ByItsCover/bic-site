@@ -11,6 +11,7 @@ locals {
     webmanifest = "application/manifest+json"
     xml         = "application/xml"
     onnx        = "application/onnx"
+    wasm        = "application/wasm"
   }
 
   files = fileset("${var.build_dir}/", "**")
