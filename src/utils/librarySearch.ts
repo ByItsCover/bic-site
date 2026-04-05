@@ -8,6 +8,9 @@ export const callLibrarySearch = async (embedding: Tensor) => {
     try {
         const response = await fetch(endpoint, {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify({vector: embedding})
         });
         if (!response.ok) {
