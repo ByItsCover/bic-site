@@ -9,6 +9,6 @@ export const Book = (
 ) => {
 
     return (
-        <img src={details.image}/>
+        <img src={details.cover_url}/>
     )
 }

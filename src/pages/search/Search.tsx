@@ -12,7 +12,7 @@ const Search = () => {
 
     const handleSearch = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("Current environment:", import.meta.env.VITE_ENVIRONMENT);
+        console.log("Current environment:", window._env_.ENVIRONMENT);
         
         const tokens = await getTensorFromText(query);
         const embedResult = await embedTokens(tokens);
