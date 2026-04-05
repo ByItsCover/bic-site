@@ -23,6 +23,11 @@ variable "bic_infra_workspace" {
   description = "Terraform Cloud Workspace BIC-Infra name"
 }
 
+variable "bic_library_search_workspace" {
+  type        = string
+  description = "Terraform Cloud Workspace BIC-Library-Search name"
+}
+
 # S3
 
 variable "build_dir" {

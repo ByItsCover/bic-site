@@ -1,5 +1,11 @@
-declare const __API_URL__: string;
+interface Window {
+  _env_: {
+    ENVIRONMENT: "test" | "dev" | "prod";
+    LIBRARY_SEARCH_URL: string;
+  }
+}
 
+/*
 interface ImportMetaEnv {
   readonly VITE_ENVIRONMENT: "test" | "dev" | "prod";
   readonly VITE_SEARCH_ENDPOINT: string;
@@ -9,3 +15,4 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+*/

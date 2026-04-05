@@ -3,7 +3,7 @@ import type { BookResult } from "../types/bookResult";
 
 
 export const callLibrarySearch = async (embedding: Tensor) => {
-    const endpoint = new URL("search", __API_URL__);
+    const endpoint = new URL("search", window._env_.LIBRARY_SEARCH_URL);
 
     try {
         const response = await fetch(endpoint, {
