@@ -8,3 +8,14 @@ data "terraform_remote_state" "bic_infra" {
     }
   }
 }
+
+data "terraform_remote_state" "bic_library_search" {
+  backend = "remote"
+
+  config = {
+    organization = var.tfe_org_name
+    workspaces = {
+      name = var.bic_library_search_workspace
+    }
+  }
+}

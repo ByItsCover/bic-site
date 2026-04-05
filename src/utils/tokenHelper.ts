@@ -1,5 +1,5 @@
 import { CLIPTokenizer, env } from "@huggingface/transformers";
-import { Tensor } from "onnxruntime-web";
+import { Tensor } from "onnxruntime-web/wasm";
 import { CLIP_PATH } from "../constants";
 
 env.allowLocalModels = true;
