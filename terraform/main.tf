@@ -6,7 +6,7 @@
 
 locals {
   site_bucket_id = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
-  library_search_url = data.terraform_remote_state.bic_infra.outputs.library_search_url
+  library_search_url = data.terraform_remote_state.bic_library_search.outputs.library_search_url
 
   mime_map = {
     css         = "text/css"
