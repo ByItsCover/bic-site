@@ -1,12 +1,12 @@
-import * as ort from 'onnxruntime-web';
+import * as ort from 'onnxruntime-web/wasm';
 import { CLIP_PATH } from '../constants';
 
 const getModelSession = async () => {
     const modelPath = CLIP_PATH + "/clip_quantized.onnx"; // Todo: Use path joiner
     const session = await ort.InferenceSession.create(
         modelPath,
-        { executionProviders: ['webgl', 'wasm'], graphOptimizationLevel: 'all'}
-    )
+        { executionProviders: ['wasm'], graphOptimizationLevel: 'all'}
+    );
 
     return session;
 }
@@ -18,4 +18,5 @@ export const embedTokens = async (tokens: ort.Tensor) => {
     
     console.log("Embedding:");
     console.log(embedding);
+    return embedding;
 }
