@@ -19,8 +19,10 @@ const Search = () => {
         console.log(embedResult);
 
         const embeddings = embedResult["embeddings"];
+        const vector = Array.prototype.slice.call(embeddings.data);
+        console.log("Vector:", vector);
 
-        const response = await callLibrarySearch(embeddings);
+        const response = await callLibrarySearch(vector);
 
 
         // const fakeResponse: BookResult = {
