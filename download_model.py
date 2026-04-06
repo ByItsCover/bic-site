@@ -142,7 +142,7 @@ def quantized_download(
     print("Exporting model to onnx format...")
 
     #input_tensor = torch.ones((2, 3, 224, 224), dtype=torch.float32)
-    tokens = tokenizer(["some dummy", "text", "and something"], return_tensors='np', padding="max_length")
+    tokens = tokenizer(["some dummy", "text", "and something"], return_tensors='pt', padding="max_length")
     print("Tokens:")
     print(tokens)
     #input_tensor = torch.tensor(tokens.get("input_ids"))
