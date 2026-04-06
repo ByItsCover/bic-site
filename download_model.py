@@ -82,12 +82,15 @@ def quantized_download(
             self.token_embedding = model.token_embedding
             self.text_pool_type = model.text_pool_type
             self.text_eos_id = model.text_eos_id
+            self.register_buffer('attn_mask', model.attn_mask, persistent=False)
 
         def forward(self, text):
+            cast_dtype = self.transformer.get_cast_dtype()
+
             x = self.token_embedding(text)  # [batch_size, n_ctx, d_model]
 
-            x = x + self.positional_embedding
-            x = self.transformer(x)
+            x = x + self.positional_embedding.to(cast_dtype)
+            x = self.transformer(x, attn_mask=self.attn_mask)
             x = self.ln_final(x)  # [batch_size, n_ctx, transformer.width]
             x = self.text_global_pool(x, text, self.text_pool_type, eos_token_id=getattr(self, "text_eos_id", None))
             if self.text_projection is not None:
