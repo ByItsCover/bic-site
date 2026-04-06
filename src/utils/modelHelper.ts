@@ -18,10 +18,6 @@ export const embedTokens = async (tokens: ort.Tensor) => {
         session = await getModelSession();
     }
     
-    console.log("Tokens before embed:", tokens);
     const embedding = await session.run({"text": tokens});
-    
-    console.log("Embedding:");
-    console.log(embedding);
     return embedding;
 }

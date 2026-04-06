@@ -12,11 +12,12 @@ const Search = () => {
 
     const handleSearch = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("Current environment:", window._env_.ENVIRONMENT);
+        //console.log("Current environment:", window._env_.ENVIRONMENT);
         
         const tokens = await getTensorFromText(query);
+        console.log("Tokens:", tokens);
         const embedResult = await embedTokens(tokens);
-        console.log(embedResult);
+        console.log("Embeddings:", embedResult);
 
         const embeddings = embedResult["embeddings"];
         const vector = Array.prototype.slice.call(embeddings.data);
