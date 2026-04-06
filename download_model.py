@@ -16,7 +16,7 @@ from onnxruntime.quantization.shape_inference import quant_pre_process
 
 def hf_download(destination: str):
 
-    repo_id = "laion/CLIP-ViT-B-32-256x256-DataComp-s34B-b86K"
+    repo_id = "laion/CLIP-ViT-B-32-laion2B-s34B-b79K"
     filenames = ["open_clip_model.safetensors", "tokenizer.json", "tokenizer_config.json", "special_tokens_map.json"]
 
     os.makedirs(destination, exist_ok=True)
@@ -142,7 +142,7 @@ def quantized_download(
     print("Exporting model to onnx format...")
 
     #input_tensor = torch.ones((2, 3, 224, 224), dtype=torch.float32)
-    tokens = tokenizer(["some dummy", "text", "and something"], return_tensors='pt', padding="max_length")
+    tokens = tokenizer(["some dummy", "text", "and something"], return_tensors='np', padding="max_length")
     print("Tokens:")
     print(tokens)
     #input_tensor = torch.tensor(tokens.get("input_ids"))
