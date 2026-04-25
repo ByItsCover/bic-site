@@ -1,13 +1,16 @@
 locals {
   site_bucket_id              = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
   site_bucket_regional_domain = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_regional_domain
+
+  access_control_id = data.terraform_remote_state.bic_infra.outputs.cf_access_control_id
+  request_policy_id = data.terraform_remote_state.bic_infra.outputs.cf_request_policy_id
+  cache_policy_id = data.terraform_remote_state.bic_infra.outputs.cf_cache_policy_id
 }
 
-/*
 resource "aws_cloudfront_distribution" "cdn" {
   origin {
     domain_name              = local.site_bucket_regional_domain
-    origin_access_control_id = aws_cloudfront_origin_access_control.current.id
+    origin_access_control_id = local.access_control_id
     origin_id                = "${local.site_bucket_id}-origin"
   }
 
@@ -20,8 +23,8 @@ resource "aws_cloudfront_distribution" "cdn" {
   aliases = [var.domain_name, "www.${var.domain_name}"]
 
   default_cache_behavior {
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.cdn.id
-    cache_policy_id          = aws_cloudfront_cache_policy.cdn.id
+    origin_request_policy_id = local.request_policy_id
+    cache_policy_id          = local.cache_policy_id
     allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods           = ["GET", "HEAD", "OPTIONS"]
     target_origin_id         = "${local.site_bucket_id}-origin"
@@ -44,4 +47,3 @@ resource "aws_cloudfront_distribution" "cdn" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 }
-*/

@@ -1,4 +1,3 @@
-/*
 resource "cloudflare_dns_record" "cname" {
   zone_id = data.cloudflare_zone.site_zone.id
   name    = "@"
@@ -16,4 +15,3 @@ resource "cloudflare_dns_record" "www_cname" {
   ttl     = 1
   proxied = true
 }
-*/
