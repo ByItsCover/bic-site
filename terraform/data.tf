@@ -21,6 +21,5 @@ data "terraform_remote_state" "bic_library_search" {
 }
 
 data "cloudflare_zone" "site_zone" {
-  name       = var.domain_name
-  account_id = var.cloudflare_account_id
+  zone_id = var.cloudflare_zone_id
 }

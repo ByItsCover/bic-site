@@ -54,7 +54,7 @@ variable "cloudflare_api_token" {
   description = "API Token for CloudFlare provider"
 }
 
-variable "cloudflare_account_id" {
+variable "cloudflare_zone_id" {
   type        = string
-  description = "CloudFlare Account ID"
+  description = "CloudFlare Zone ID"
 }
