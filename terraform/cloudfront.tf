@@ -33,6 +33,7 @@ resource "aws_cloudfront_cache_policy" "cdn" {
   }
 }
 
+/*
 resource "aws_cloudfront_distribution" "cdn" {
   origin {
     domain_name              = local.site_bucket_regional_domain
@@ -72,3 +73,4 @@ resource "aws_cloudfront_distribution" "cdn" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 }
+*/
