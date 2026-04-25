@@ -10,6 +10,23 @@ resource "aws_cloudfront_origin_access_control" "current" {
   signing_protocol                  = "sigv4"
 }
 
+resource "aws_cloudfront_origin_request_policy" "cdn" {
+  name    = "Custom-CORS-Policy"
+  comment = "Policy for custom origin with CORS"
+  cookies_config {
+    cookie_behavior = "none"
+  }
+  headers_config {
+    header_behavior = "whitelist"
+    headers {
+      items = ["Origin"]
+    }
+  }
+  query_strings_config {
+    query_string_behavior = "none"
+  }
+}
+
 resource "aws_cloudfront_cache_policy" "cdn" {
   name        = "Custom-CachingOptimized-Policy"
   comment     = "Policy with caching enabled. Supports Gzip and Brotli compression."
@@ -49,12 +66,13 @@ resource "aws_cloudfront_distribution" "cdn" {
   aliases = [var.domain_name]
 
   default_cache_behavior {
-    cache_policy_id        = aws_cloudfront_cache_policy.cdn.id
-    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "${local.site_bucket_id}-origin"
-    compress               = true
-    viewer_protocol_policy = "redirect-to-https"
+    origin_request_policy_id = aws_cloudfront_origin_request_policy.cdn.id
+    cache_policy_id          = aws_cloudfront_cache_policy.cdn.id
+    allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods           = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id         = "${local.site_bucket_id}-origin"
+    compress                 = true
+    viewer_protocol_policy   = "redirect-to-https"
   }
 
   price_class = "PriceClass_100"
