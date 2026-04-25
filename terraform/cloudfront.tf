@@ -11,7 +11,7 @@ resource "aws_cloudfront_origin_access_control" "current" {
 }
 
 resource "aws_cloudfront_cache_policy" "cdn" {
-  name        = "Site Managed-CachingOptimized policy"
+  name        = "Custom-CachingOptimized-Policy"
   comment     = "Policy with caching enabled. Supports Gzip and Brotli compression."
   default_ttl = 86400
   max_ttl     = 31536000
