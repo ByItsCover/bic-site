@@ -63,7 +63,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   default_root_object = var.site_bucket_index_doc
   http_version        = "http2and3"
 
-  aliases = [var.domain_name]
+  aliases = [var.domain_name, "www.${var.domain_name}"]
 
   default_cache_behavior {
     origin_request_policy_id = aws_cloudfront_origin_request_policy.cdn.id
