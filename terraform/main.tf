@@ -5,7 +5,7 @@
 */
 
 locals {
-  site_bucket_id = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
+  site_bucket_id     = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
   library_search_url = data.terraform_remote_state.bic_library_search.outputs.library_search_url
 
   mime_map = {
@@ -22,16 +22,15 @@ locals {
   }
 
   files = fileset("${var.build_dir}/", "**")
-  objects = {
-    for file in local.files : file => {
-      content_type = lookup(local.mime_map, element(split(".", basename(file)), -1), "application/unknown")
-      source       = "${var.build_dir}/${file}"
-    }
-  }
 }
 
 resource "aws_s3_object" "upload_site" {
-  for_each = local.objects
+  for_each = {
+    for file in local.files : file => {
+      content_type = lookup(local.mime_map, split(".", basename(file))[-1], "application/unknown")
+      source       = "${var.build_dir}/${file}"
+    }
+  }
 
   bucket       = local.site_bucket_id
   key          = each.key
@@ -50,4 +49,4 @@ resource "aws_s3_object" "site_config" {
   };
   EOF
   content_type = "application/javascript"
-} 
+}
