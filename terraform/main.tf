@@ -27,7 +27,7 @@ locals {
 resource "aws_s3_object" "upload_site" {
   for_each = {
     for file in local.files : file => {
-      content_type = lookup(local.mime_map, split(".", basename(file))[-1], "application/unknown")
+      content_type = lookup(local.mime_map, element(split(".", basename(file)), -1), "application/unknown")
       source       = "${var.build_dir}/${file}"
     }
   }
