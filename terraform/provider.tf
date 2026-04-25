@@ -4,7 +4,7 @@ provider "aws" {
 
 provider "aws" {
   alias  = "acm_provider"
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 provider "cloudflare" {
