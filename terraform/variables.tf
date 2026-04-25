@@ -35,3 +35,16 @@ variable "build_dir" {
   description = "Build directory of static site for upload"
   default     = "."
 }
+
+variable "site_bucket_index_doc" {
+  type        = string
+  description = "Index document file name within site S3 bucket"
+  default     = "index.html"
+}
+
+# Website
+
+variable "domain_name" {
+  type        = string
+  description = "Domain name for site"
+}
