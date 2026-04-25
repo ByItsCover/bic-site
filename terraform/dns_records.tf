@@ -6,3 +6,12 @@ resource "cloudflare_dns_record" "cname" {
   ttl     = 1
   proxied = true
 }
+
+resource "cloudflare_dns_record" "www_cname" {
+  zone_id = data.cloudflare_zone.site_zone.id
+  name    = "www"
+  type    = "CNAME"
+  content = aws_cloudfront_distribution.cdn.domain_name
+  ttl     = 1
+  proxied = true
+}
