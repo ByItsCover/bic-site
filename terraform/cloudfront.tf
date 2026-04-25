@@ -50,7 +50,7 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   default_cache_behavior {
     cache_policy_id        = aws_cloudfront_cache_policy.cdn.id
-    allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST"]
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "${local.site_bucket_id}-origin"
     compress               = true
