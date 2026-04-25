@@ -48,3 +48,13 @@ variable "domain_name" {
   type        = string
   description = "Domain name for site"
 }
+
+variable "cloudflare_api_token" {
+  type        = string
+  description = "API Token for CloudFlare provider"
+}
+
+variable "cloudflare_zone_id" {
+  type        = string
+  description = "CloudFlare Zone ID"
+}

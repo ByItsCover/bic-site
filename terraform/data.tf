@@ -19,3 +19,7 @@ data "terraform_remote_state" "bic_library_search" {
     }
   }
 }
+
+data "cloudflare_zone" "site_zone" {
+  zone_id = var.cloudflare_zone_id
+}
