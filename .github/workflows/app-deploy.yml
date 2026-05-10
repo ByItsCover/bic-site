@@ -105,6 +105,8 @@ jobs:
   tf-apply:
     name: Terraform apply
     runs-on: ubuntu-latest
+    permissions:
+      deployments: write
     needs: site-build
     if: ${{ always() && !failure() && !cancelled() }}
 
@@ -118,6 +120,7 @@ jobs:
       ENVIRONMENT: prod
       TF_CLOUD_PROJECT: ByItsCover_PROD
       TF_WORKSPACE: bic-site-prod
+      TF_VAR_domain_name: by-its-cover.com
       TF_VAR_build_dir: dist
       TF_VAR_cloudflare_api_token: ${{ secrets.CF_API_TOKEN }}
       TF_VAR_cloudflare_zone_id: ${{ secrets.CF_ZONE_ID }}
@@ -125,6 +128,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ github.token }}'
+          environment-url: https://${{ env.TF_VAR_domain_name }}
+          environment: ${{ env.ENVIRONMENT }}
       
       - name: Downloading Old App build artifacts
         uses: dawidd6/action-download-artifact@v20
