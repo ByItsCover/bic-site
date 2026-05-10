@@ -128,14 +128,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-
-      - uses: chrnorm/deployment-action@v2
-        name: Create GitHub deployment
-        id: deployment
-        with:
-          token: '${{ github.token }}'
-          environment-url: https://${{ env.TF_VAR_domain_name }}
-          environment: ${{ env.ENVIRONMENT }}
       
       - name: Downloading Old App build artifacts
         uses: dawidd6/action-download-artifact@v20
@@ -175,3 +167,13 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -var-file=variables/${{ env.ENVIRONMENT }}.tfvars
+      
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: https://${{ env.TF_VAR_domain_name }}
+          environment: ${{ env.ENVIRONMENT }}
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
