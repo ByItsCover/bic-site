@@ -12,7 +12,6 @@ const Search = () => {
 
     const handleSearch = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        //console.log("Current environment:", window._env_.ENVIRONMENT);
         
         const tokens = await getTensorFromText(query);
         console.log("Tokens:", tokens);
@@ -25,18 +24,13 @@ const Search = () => {
 
         const response = await callLibrarySearch(vector);
 
-
-        // const fakeResponse: BookResult = {
-        //     id: 2n,
-        //     image: "https://media1.tenor.com/m/sF-65FzDeFIAAAAC/cat-pondering-cat.gif"
-        // };
         setResults(response);
     };
 
     return (
         <>
-            <h1>Howdy</h1>
-            <p>Do</p>
+            <h1>Covers Library Search</h1>
+            <p>Find books by vague descriptions</p>
 
             <SearchBar 
                 query={query} 
