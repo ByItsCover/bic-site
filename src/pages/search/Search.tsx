@@ -31,6 +31,7 @@ const Search = () => {
         <>
             <h1>Covers Library Search</h1>
             <p>Find books by vague descriptions</p>
+            <hr/>
 
             <SearchBar 
                 query={query} 
