@@ -32,11 +32,12 @@ resource "aws_s3_object" "upload_site" {
     }
   }
 
-  bucket       = local.bucket_id
-  key          = each.key
-  source       = each.value.source
-  etag         = filemd5(each.value.source)
-  content_type = each.value.content_type
+  bucket        = local.bucket_id
+  key           = each.key
+  source        = each.value.source
+  etag          = filemd5(each.value.source)
+  content_type  = each.value.content_type
+  cache_control = each.key == var.site_bucket_index_doc ? "no-cache, no-store, must-revalidate" : null
 }
 
 resource "aws_s3_object" "site_config" {
