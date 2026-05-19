@@ -13,6 +13,6 @@ export const getTensorFromText = async (text: string) => {
         tokenizer = await CLIPTokenizer.from_pretrained(tokenizerDir, {local_files_only: true});
     }
 
-    const tokens: { input_ids: Tensor } = await tokenizer(text, {return_tensor: 'np', padding: 'max_length'});
-    return tokens.input_ids;
+    const tokens = tokenizer(text, {return_tensor: true, padding: 'max_length'});
+    return new Tensor(tokens.input_ids.type, [...tokens.input_ids.data], tokens.input_ids.dims);
 }
