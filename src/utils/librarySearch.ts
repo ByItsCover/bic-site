@@ -1,7 +1,8 @@
 import type { BookResult } from "../types/bookResult";
+import type { NerResult } from "../types/nerResult.ts";
 
 
-export const callLibrarySearch = async (embedding: number[]) => {
+export const callLibrarySearch = async (embedding: number[], nerResults: NerResult[]) => {
     const endpoint = window._env_.LIBRARY_SEARCH_URL + "/search"; // TODO: Do more intelligent joining
 
     try {
@@ -10,7 +11,10 @@ export const callLibrarySearch = async (embedding: number[]) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({vector: embedding})
+            body: JSON.stringify({
+                vector: embedding,
+                ner: nerResults
+            })
         });
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
