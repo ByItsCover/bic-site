@@ -8,16 +8,14 @@ from transformers import CLIPTokenizer
 
 import torch
 import open_clip
+from gliner import GLiNER
 
 import onnx
 from onnxruntime.quantization import quantize_dynamic, QuantType
 from onnxruntime.quantization.shape_inference import quant_pre_process
 
 
-def hf_download(destination: str):
-
-    repo_id = "laion/CLIP-ViT-B-32-laion2B-s34B-b79K"
-    filenames = ["open_clip_model.safetensors", "tokenizer.json", "tokenizer_config.json", "special_tokens_map.json"]
+def hf_download(destination: str, repo_id: str, filenames: list[str]):
 
     os.makedirs(destination, exist_ok=True)
 
@@ -32,42 +30,75 @@ def hf_download(destination: str):
     print(f"Model {repo_id} downloaded to {destination}/")
 
 def quantized_download(
-        destination: str, 
+        clip_destination: str,
+        gliner_destination: str,
         clean_cache: bool = True
     ):
 
-    filename = "open_clip_model.safetensors"
+    clip_filename = "open_clip_model.safetensors"
+    gliner_filename = "pytorch_model.bin"
 
-    script_state = {
+    clip_script_state = {
         "model_name": "ViT-B-32",
         "pretrained_name": os.path.join(
-            destination,
-            filename
+            clip_destination,
+            clip_filename
         ),
         "onnx_model_path": os.path.join(
-            destination,
+            clip_destination,
             "clip.onnx"
         ),
         "onnx_model_shapes_path": os.path.join(
-            destination,
+            clip_destination,
             "clip_shapes.onnx"
         ),
         "quant_pre_model_path": os.path.join(
-            destination,
+            clip_destination,
             "clip_pre_quantized.onnx"
         ),
         "quant_model_path": os.path.join(
-            destination,
+            clip_destination,
             "clip_quantized.onnx"
         ),
         "preprocess_path": os.path.join(
-            destination,
+            clip_destination,
             "preprocess.onnx"
         ),
         "device": "cpu"
     }
 
-    os.makedirs(destination, exist_ok=True)
+    gliner_script_state = {
+        "pretrained_name": os.path.join(
+            gliner_destination,
+            gliner_filename
+        ),
+        "onnx_model_name": "gliner.onnx",
+        "onnx_model_path": os.path.join(
+            gliner_destination,
+            "gliner.onnx"
+        ),
+        "onnx_model_shapes_path": os.path.join(
+            gliner_destination,
+            "gliner_shapes.onnx"
+        ),
+        "quant_pre_model_path": os.path.join(
+            gliner_destination,
+            "gliner_pre_quantized.onnx"
+        ),
+        "quant_model_name": "gliner_quantized.onnx",
+        "quant_model_path": os.path.join(
+            gliner_destination,
+            "gliner_quantized.onnx"
+        ),
+        "preprocess_path": os.path.join(
+            gliner_destination,
+            "preprocess.onnx"
+        ),
+        "device": "cpu"
+    }
+
+    os.makedirs(clip_destination, exist_ok=True)
+    os.makedirs(gliner_destination, exist_ok=True)
 
 
     print("Loading Clip...")
@@ -127,16 +158,50 @@ def quantized_download(
 
             return pooled
 
+    class UniEncoderSpanWrapper(torch.nn.Module):
+        def __init__(self, core):
+            super().__init__()
+            self.core = core
+
+        def forward(
+            self,
+            input_ids,
+            attention_mask,
+            words_mask,
+            text_lengths,
+            span_idx,
+            span_mask,
+        ):
+            out = self.core(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                words_mask=words_mask,
+                text_lengths=text_lengths,
+                span_idx=span_idx,
+                span_mask=span_mask,
+            )
+            return out.logits if hasattr(out, "logits") else out[0]
+
     clip_model, _, _ = open_clip.create_model_and_transforms(
-        script_state["model_name"],
-        pretrained=script_state["pretrained_name"],
-        device=script_state["device"]
+        clip_script_state["model_name"],
+        pretrained=clip_script_state["pretrained_name"],
+        device=clip_script_state["device"]
     )
-    tokenizer: CLIPTokenizer = CLIPTokenizer.from_pretrained(destination)
+    tokenizer: CLIPTokenizer = CLIPTokenizer.from_pretrained(clip_destination)
     clip_text = CLIPText(clip_model)
     clip_text.eval()
 
     print(clip_text)
+
+    gliner_model = GLiNER.from_pretrained(gliner_destination, load_tokenizer=True)
+
+    gliner_model.config.to_json_file(os.path.join(gliner_destination, "gliner_config.json"))
+    gliner_model.data_processor.transformer_tokenizer.save_pretrained(gliner_destination)
+
+    gliner_wrapper = UniEncoderSpanWrapper(gliner_model.model.eval())
+    gliner_wrapper.eval()
+
+    print(gliner_wrapper)
 
 
     print("Exporting model to onnx format...")
@@ -150,7 +215,7 @@ def quantized_download(
 
     torch.onnx.export(clip_text,
                   (input_tensor,),
-                  script_state["onnx_model_path"],
+                  clip_script_state["onnx_model_path"],
                   input_names = ['text'],
                   output_names = ['embeddings'],
                   dynamic_shapes=({0: torch.export.Dim.DYNAMIC},),
@@ -158,41 +223,121 @@ def quantized_download(
                   )
 
 
+    text = "ONNX is an open-source format designed to enable the interoperability of AI models across various frameworks and tools."
+    labels = ['format', 'model', 'tool', 'cat']
+    inputs = gliner_model._build_dummy_batch(labels, text)
+    spec = gliner_model._get_onnx_input_spec()
+    all_inputs = (inputs['input_ids'], inputs['attention_mask'],
+                    inputs['words_mask'], inputs['text_lengths'],
+                    inputs['span_idx'], inputs['span_mask'])
+
+    torch.onnx.export(gliner_wrapper,
+                    all_inputs,
+                    gliner_script_state["onnx_model_path"],
+                    input_names = spec['input_names'],
+                    output_names = spec['output_names'],
+                    dynamic_axes= spec['dynamic_axes'],
+                    dynamo=False,
+                    external_data=False
+                    )
+
     print("Quantizing model...")
     
-    model = onnx.load(script_state["onnx_model_path"])
-    model = onnx.shape_inference.infer_shapes(model)
-    onnx.save(model, script_state["onnx_model_shapes_path"])
+    clip_onnx_model = onnx.load(clip_script_state["onnx_model_path"])
+    clip_onnx_model = onnx.shape_inference.infer_shapes(clip_onnx_model)
+    onnx.save(clip_onnx_model, clip_script_state["onnx_model_shapes_path"])
 
-    quant_pre_process(script_state["onnx_model_shapes_path"],
-        script_state["quant_pre_model_path"],
+    quant_pre_process(clip_script_state["onnx_model_shapes_path"],
+        clip_script_state["quant_pre_model_path"],
         skip_optimization=False,
         skip_symbolic_shape=True,
         verbose=3)
 
-    quantize_dynamic(script_state["quant_pre_model_path"],
-                                   script_state["quant_model_path"],
+    quantize_dynamic(clip_script_state["quant_pre_model_path"],
+                                   clip_script_state["quant_model_path"],
                                    weight_type=QuantType.QUInt8)
+
+
+    gliner_onnx_model = onnx.load(gliner_script_state["onnx_model_path"])
+    gliner_onnx_model = onnx.shape_inference.infer_shapes(gliner_onnx_model)
+    onnx.save(gliner_onnx_model, gliner_script_state["onnx_model_shapes_path"])
+
+    quant_pre_process(gliner_script_state["onnx_model_shapes_path"],
+                      gliner_script_state["quant_pre_model_path"],
+                      skip_optimization=False,
+                      skip_symbolic_shape=True,
+                      verbose=3)
+
+    gliner_onnx_model = onnx.load(gliner_script_state["quant_pre_model_path"])
+
+    nodes_to_exclude = set()
+    for node in gliner_onnx_model.graph.node:
+        # Add the node name
+        nodes_to_exclude.add(node.name)
+
+    # Create base attention layer paths
+    attention_paths = [
+        "/output/dense",
+        "/intermediate/dense"
+    ]
+
+    # Generate the full paths for all encoder layers
+    attention_layer_paths = [
+        f"/token_rep_layer/bert_layer/model/encoder/layer.{layer_num}{path}"
+        for layer_num in range(12)  # 12 encoder layers (0-11)
+        for path in attention_paths
+    ]
+
+    # Update nodes_to_exclude
+    nodes_to_exclude_v2 = [
+        node for node in nodes_to_exclude
+        if any(node.startswith(prefix) for prefix in attention_layer_paths)
+    ]
+
+    quantize_dynamic(gliner_script_state["quant_pre_model_path"],
+                     gliner_script_state["quant_model_path"],
+                     nodes_to_exclude=nodes_to_exclude_v2,
+                     per_channel=True,
+                     weight_type=QuantType.QUInt8)
 
 
     if clean_cache:
         print("Cleaning up...")
-        os.remove(script_state["pretrained_name"])
+        os.remove(clip_script_state["pretrained_name"])
+        os.remove(gliner_script_state["pretrained_name"])
     
-    os.remove(script_state["onnx_model_path"])
-    os.remove(script_state["onnx_model_shapes_path"])
-    os.remove(script_state["quant_pre_model_path"])
+    os.remove(clip_script_state["onnx_model_path"])
+    os.remove(clip_script_state["onnx_model_shapes_path"])
+    os.remove(clip_script_state["quant_pre_model_path"])
 
-    if os.path.isfile(script_state["onnx_model_path"] + '.data'):
-        os.remove(script_state["onnx_model_path"] + '.data')
+    os.remove(gliner_script_state["onnx_model_path"])
+    os.remove(gliner_script_state["onnx_model_shapes_path"])
+    os.remove(gliner_script_state["quant_pre_model_path"])
+
+    if os.path.isfile(clip_script_state["onnx_model_path"] + '.data'):
+        os.remove(clip_script_state["onnx_model_path"] + '.data')
+
+    if os.path.isfile(gliner_script_state["onnx_model_path"] + '.data'):
+        os.remove(gliner_script_state["onnx_model_path"] + '.data')
 
 
-    print(f"Model {script_state["pretrained_name"]} quantized to {destination}/")
+    print(f"Model {clip_script_state["pretrained_name"]} quantized to {clip_destination}/")
+    print(f"Model {gliner_script_state["pretrained_name"]} quantized to {gliner_destination}/")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         raise ValueError("Destination path is missing")
 
-    destination = os.path.join(sys.argv[1], "clip_model")
-    hf_download(destination)
-    quantized_download(destination)
+    clip_destination = os.path.join(sys.argv[1], "clip_model")
+    gliner_destination = os.path.join(sys.argv[1], "gliner_model")
+    hf_download(
+        clip_destination,
+        "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+        ["open_clip_model.safetensors", "tokenizer.json", "tokenizer_config.json", "special_tokens_map.json"]
+    )
+    hf_download(
+        gliner_destination,
+        "urchade/gliner_base",
+        ["pytorch_model.bin", "gliner_config.json"]
+    )
+    quantized_download(clip_destination, gliner_destination)

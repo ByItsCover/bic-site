@@ -26,6 +26,7 @@ dist-ssr
 # Python Build (temporary)
 clenv/
 clip_model/
+gliner_model/
 
 # General
 .env

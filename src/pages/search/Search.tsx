@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { getTensorFromText } from "../../utils/tokenHelper";
-import { embedTokens } from "../../utils/modelHelper";
+import { embedTokens, extractNER } from "../../utils/modelHelper";
 import { SearchBar } from "../../components/SearchBar";
 import { ResultsShelf } from "../../components/ResultsShelf";
 import { callLibrarySearch } from "../../utils/librarySearch";
 import type { BookResult } from "../../types/bookResult";
+import type { NerResult } from "../../types/nerResult.ts";
+import {NER_SEARCH_LABELS} from "../../constants.ts";
 
 const Search = () => {
     const [query, setQuery] = useState('');
@@ -12,6 +14,15 @@ const Search = () => {
 
     const handleSearch = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const rawNer = await extractNER(query);
+        const nerResults: NerResult[] = rawNer[0].filter(res => NER_SEARCH_LABELS.includes(res.label))
+            .map((res) => ({
+                label: res.label,
+                text: res.spanText,
+                score: res.score,
+            }));
+        console.log("NER Results:", nerResults);
         
         const tokens = await getTensorFromText(query);
         console.log("Tokens:", tokens);
@@ -22,7 +33,7 @@ const Search = () => {
         const vector = Array.prototype.slice.call(embeddings.data);
         console.log("Vector:", vector);
 
-        const response = await callLibrarySearch(vector);
+        const response = await callLibrarySearch(vector, nerResults);
 
         setResults(response);
     };

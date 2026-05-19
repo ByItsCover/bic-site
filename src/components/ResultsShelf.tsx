@@ -1,4 +1,4 @@
-import {ImageGallery} from "react-image-grid-gallery";
+import { ImageGallery } from "react-image-grid-gallery";
 import type { BookResult } from "../types/bookResult";
 import type { BookCover } from "../types/bookCover.ts";
 
