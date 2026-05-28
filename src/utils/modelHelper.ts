@@ -45,13 +45,11 @@ export const embedTokens = async (tokens: ort.Tensor) => {
 }
 
 export const extractNER = async (text: string) => {
-    // if (glinerModel === null) {
-    //     glinerModel = await getGlinerModel();
-    //     await glinerModel.initialize();
-    // }
+    if (glinerModel === null) {
+        glinerModel = await getGlinerModel();
+        await glinerModel.initialize();
+    }
     console.log("Text:", text);
-    glinerModel = await getGlinerModel();
-    await glinerModel.initialize();
 
     return await glinerModel.inference({
         texts: [text],
