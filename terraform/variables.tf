@@ -58,3 +58,14 @@ variable "cloudflare_zone_id" {
   type        = string
   description = "CloudFlare Zone ID"
 }
+
+variable "cached_file_extensions" {
+  type        = list(string)
+  description = "File extensions to be marked as cacheable by CloudFlare"
+}
+
+variable "cache_ttl"  {
+  type        = number
+  description = "Custom cache Time To Live in seconds"
+  default = 86400
+}
