@@ -64,8 +64,8 @@ variable "cached_file_extensions" {
   description = "File extensions to be marked as cacheable by CloudFlare"
 }
 
-variable "cache_ttl"  {
+variable "cache_ttl" {
   type        = number
   description = "Custom cache Time To Live in seconds"
-  default = 86400
+  default     = 86400
 }
