@@ -15,8 +15,8 @@ Original source: https://github.com/beachplum-io/brutalismbot/blob/main/blue/web
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.45.0 |
-| <a name="provider_aws.acm_provider"></a> [aws.acm\_provider](#provider\_aws.acm\_provider) | 6.45.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.47.0 |
+| <a name="provider_aws.acm_provider"></a> [aws.acm\_provider](#provider\_aws.acm\_provider) | 6.47.0 |
 | <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | 5.19.1 |
 | <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
@@ -36,6 +36,7 @@ No modules.
 | [cloudflare_dns_record.cert_validation](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/dns_record) | resource |
 | [cloudflare_dns_record.cname](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/dns_record) | resource |
 | [cloudflare_dns_record.www_cname](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/dns_record) | resource |
+| [cloudflare_ruleset.cache_extensions_rules](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/ruleset) | resource |
 | [cloudflare_zone.site_zone](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/data-sources/zone) | data source |
 | [terraform_remote_state.bic_infra](https://registry.terraform.io/providers/hashicorp/terraform/latest/docs/data-sources/remote_state) | data source |
 | [terraform_remote_state.bic_library_search](https://registry.terraform.io/providers/hashicorp/terraform/latest/docs/data-sources/remote_state) | data source |
@@ -48,6 +49,8 @@ No modules.
 | <a name="input_bic_infra_workspace"></a> [bic\_infra\_workspace](#input\_bic\_infra\_workspace) | Terraform Cloud Workspace BIC-Infra name | `string` | n/a | yes |
 | <a name="input_bic_library_search_workspace"></a> [bic\_library\_search\_workspace](#input\_bic\_library\_search\_workspace) | Terraform Cloud Workspace BIC-Library-Search name | `string` | n/a | yes |
 | <a name="input_build_dir"></a> [build\_dir](#input\_build\_dir) | Build directory of static site for upload | `string` | `"."` | no |
+| <a name="input_cache_ttl"></a> [cache\_ttl](#input\_cache\_ttl) | Custom cache Time To Live in seconds | `number` | `86400` | no |
+| <a name="input_cached_file_extensions"></a> [cached\_file\_extensions](#input\_cached\_file\_extensions) | File extensions to be marked as cacheable by CloudFlare | `list(string)` | n/a | yes |
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | API Token for CloudFlare provider | `string` | n/a | yes |
 | <a name="input_cloudflare_zone_id"></a> [cloudflare\_zone\_id](#input\_cloudflare\_zone\_id) | CloudFlare Zone ID | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Domain name for site | `string` | n/a | yes |
