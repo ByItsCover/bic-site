@@ -242,7 +242,8 @@ def quantized_download(
                     )
 
     print("Quantizing model...")
-    
+
+    """ Skipping Quantization of CLIP Text
     clip_onnx_model = onnx.load(clip_script_state["onnx_model_path"])
     clip_onnx_model = onnx.shape_inference.infer_shapes(clip_onnx_model)
     onnx.save(clip_onnx_model, clip_script_state["onnx_model_shapes_path"])
@@ -256,6 +257,7 @@ def quantized_download(
     quantize_dynamic(clip_script_state["quant_pre_model_path"],
                                    clip_script_state["quant_model_path"],
                                    weight_type=QuantType.QUInt8)
+    """
 
 
     gliner_onnx_model = onnx.load(gliner_script_state["onnx_model_path"])
@@ -305,10 +307,12 @@ def quantized_download(
         print("Cleaning up...")
         os.remove(clip_script_state["pretrained_name"])
         os.remove(gliner_script_state["pretrained_name"])
-    
+
+    """
     os.remove(clip_script_state["onnx_model_path"])
     os.remove(clip_script_state["onnx_model_shapes_path"])
     os.remove(clip_script_state["quant_pre_model_path"])
+    """
 
     os.remove(gliner_script_state["onnx_model_path"])
     os.remove(gliner_script_state["onnx_model_shapes_path"])
@@ -321,7 +325,8 @@ def quantized_download(
         os.remove(gliner_script_state["onnx_model_path"] + '.data')
 
 
-    print(f"Model {clip_script_state["pretrained_name"]} quantized to {clip_destination}/")
+    #print(f"Model {clip_script_state["pretrained_name"]} quantized to {clip_destination}/")
+    print(f"Model {clip_script_state["pretrained_name"]} onnx exported to {clip_destination}/")
     print(f"Model {gliner_script_state["pretrained_name"]} quantized to {gliner_destination}/")
 
 if __name__ == "__main__":
