@@ -8,6 +8,27 @@ import type { BookResult } from "../../types/bookResult";
 import type { NerResult } from "../../types/nerResult.ts";
 import {NER_SEARCH_LABELS} from "../../constants.ts";
 
+const getSemanticResults = async (query: string) => {
+    const tokens = await getTensorFromText(query);
+    console.log("Tokens:", tokens);
+    const embedResult = await embedTokens(tokens);
+    console.log("Embeddings:", embedResult);
+
+    const embeddings = embedResult["embeddings"];
+    return Array.prototype.slice.call(embeddings.data);
+};
+
+const getKeywordResults = async (query: string) => {
+    const rawNer = await extractNER(query);
+    const nerResults: NerResult[] = rawNer[0].filter(res => NER_SEARCH_LABELS.includes(res.label))
+        .map((res) => ({
+            label: res.label,
+            text: res.spanText,
+            score: res.score,
+        }));
+    return nerResults;
+};
+
 const Search = () => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<BookResult[]>([]);
@@ -15,25 +36,15 @@ const Search = () => {
     const handleSearch = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const rawNer = await extractNER(query);
-        const nerResults: NerResult[] = rawNer[0].filter(res => NER_SEARCH_LABELS.includes(res.label))
-            .map((res) => ({
-                label: res.label,
-                text: res.spanText,
-                score: res.score,
-            }));
+        const [vectorResults, nerResults] = await Promise.all([
+            getSemanticResults(query),
+            getKeywordResults(query),
+        ]);
+
+        console.log("Vector:", vectorResults);
         console.log("NER Results:", nerResults);
-        
-        const tokens = await getTensorFromText(query);
-        console.log("Tokens:", tokens);
-        const embedResult = await embedTokens(tokens);
-        console.log("Embeddings:", embedResult);
 
-        const embeddings = embedResult["embeddings"];
-        const vector = Array.prototype.slice.call(embeddings.data);
-        console.log("Vector:", vector);
-
-        const response = await callLibrarySearch(vector, nerResults);
+        const response = await callLibrarySearch(vectorResults, nerResults);
 
         setResults(response);
     };

@@ -7,7 +7,7 @@ let session: ort.InferenceSession | null = null;
 let glinerModel: Gliner | null = null;
 
 const getClipSession = async () => {
-    const modelPath = CLIP_PATH + "/clip_quantized.onnx"; // Todo: Use path joiner
+    const modelPath = CLIP_PATH + "/clip.onnx"; // Not using Quantized model. Also, Todo: Use path joiner
     return await ort.InferenceSession.create(
         modelPath,
         { executionProviders: ['wasm'], graphOptimizationLevel: 'all'}
