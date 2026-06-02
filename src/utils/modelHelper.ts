@@ -1,26 +1,24 @@
 import * as ort from 'onnxruntime-web/wasm';
 import { CLIP_PATH, GLINER_PATH, NER_QUERY_LABELS } from '../constants';
 import { Gliner } from "gliner";
-//import { AutoTokenizer, ModelRegistry } from "@huggingface/transformers";
 
-let session: ort.InferenceSession | null = null;
-let glinerModel: Gliner | null = null;
+let clipSessionPromise: Promise<ort.InferenceSession> | null = null;
+let glinerModelPromise: Promise<Gliner> | null = null;
 
-const getClipSession = async () => {
-    const modelPath = CLIP_PATH + "/clip.onnx"; // Not using Quantized model. Also, Todo: Use path joiner
-    return await ort.InferenceSession.create(
-        modelPath,
-        { executionProviders: ['wasm'], graphOptimizationLevel: 'all'}
-    );
+export const loadClip = () => {
+    if (!clipSessionPromise) {
+        const modelPath = CLIP_PATH + "/clip.onnx"; // Not using Quantized model. Also, Todo: Use path joiner
+        clipSessionPromise = ort.InferenceSession.create(
+            modelPath,
+            { executionProviders: ['wasm'], graphOptimizationLevel: 'all'}
+        );
+    }
+
+    return clipSessionPromise;
 }
 
-const getGlinerModel = async () => {
-    // const tokenizerFiles = await ModelRegistry.get_tokenizer_files(GLINER_PATH);
-    // console.log("Tokenizer Files:", tokenizerFiles);
-    // const tokenizer = await AutoTokenizer.from_pretrained("/gliner_model");
-    // console.log("Tokenizer:", tokenizer);
-
-    return new Gliner({
+const loadGlinerModel = async () => {
+    const glinerModel = new Gliner({
         tokenizerPath: GLINER_PATH,
         onnxSettings: {
             //"/glinner.onnx"
@@ -34,21 +32,25 @@ const getGlinerModel = async () => {
             useBrowserCache: true,
         }
     });
+    await glinerModel.initialize();
+    return glinerModel;
+}
+
+export const loadGliner = () => {
+    if (!glinerModelPromise) {
+        glinerModelPromise = loadGlinerModel();
+    }
+
+    return glinerModelPromise;
 }
 
 export const embedTokens = async (tokens: ort.Tensor) => {
-    if (session === null) {
-        session = await getClipSession();
-    }
-    
-    return await session.run({"text": tokens});
+    const clipSession = await loadClip();
+    return await clipSession.run({"text": tokens});
 }
 
 export const extractNER = async (text: string) => {
-    if (glinerModel === null) {
-        glinerModel = await getGlinerModel();
-        await glinerModel.initialize();
-    }
+    const glinerModel = await loadGliner();
     console.log("Text:", text);
 
     return await glinerModel.inference({
