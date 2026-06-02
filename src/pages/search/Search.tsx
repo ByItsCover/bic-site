@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getTensorFromText } from "../../utils/tokenHelper";
-import { embedTokens, extractNER } from "../../utils/modelHelper";
+import { loadClip, loadGliner, embedTokens, extractNER } from "../../utils/modelHelper";
 import { SearchBar } from "../../components/SearchBar";
 import { ResultsShelf } from "../../components/ResultsShelf";
 import { callLibrarySearch } from "../../utils/librarySearch";
 import type { BookResult } from "../../types/bookResult";
 import type { NerResult } from "../../types/nerResult.ts";
-import {NER_SEARCH_LABELS} from "../../constants.ts";
+import { NER_SEARCH_LABELS } from "../../constants.ts";
 
 const getSemanticResults = async (query: string) => {
     const tokens = await getTensorFromText(query);
@@ -32,6 +32,11 @@ const getKeywordResults = async (query: string) => {
 const Search = () => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<BookResult[]>([]);
+
+    useEffect(() => {
+        loadClip();
+        loadGliner();
+    }, []);
 
     const handleSearch = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
