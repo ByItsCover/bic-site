@@ -1,4 +1,3 @@
-import { ImageGallery } from "react-image-grid-gallery";
 import type { BookResult } from "../types/bookResult";
 import type { BookCover } from "../types/bookCover.ts";
 
@@ -17,7 +16,10 @@ export const ResultsShelf = (
     }));
 
     return (
-        imagesArray.length == 0 ? <></> :
-            <ImageGallery imagesData={imagesArray} />
+        <div className="book-grid">
+            {imagesArray.map((image) => (
+                <img key={image.id} src={image.src} alt={image.alt} ></img>
+            ))}
+        </div>
     )
 }
