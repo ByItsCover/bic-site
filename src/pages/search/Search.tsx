@@ -32,19 +32,7 @@ const getKeywordResults = async (query: string) => {
 
 const Search = () => {
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState<BookResult[]>([
-        {cover_id: 1, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=640"},
-        {cover_id: 2, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=240"},
-        {cover_id: 3, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=640"},
-        {cover_id: 4, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=240"},
-        {cover_id: 5, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=640"},
-        {cover_id: 6, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=340"},
-        {cover_id: 7, cover_url: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1468196828i/30985381.jpg"},
-        {cover_id: 8, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=640"},
-        {cover_id: 9, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=740"},
-        {cover_id: 10, cover_url: "https://www.hachettebookgroup.com/wp-content/uploads/2023/10/9780316554909.jpg?w=140"},
-
-    ]);
+    const [results, setResults] = useState<BookResult[]>([]);
 
     useEffect(() => {
         loadClip();
