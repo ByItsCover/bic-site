@@ -7,6 +7,7 @@ import { callLibrarySearch } from "../../utils/librarySearch";
 import type { BookResult } from "../../types/bookResult";
 import type { NerResult } from "../../types/nerResult.ts";
 import { NER_SEARCH_LABELS } from "../../constants.ts";
+import "./search.css"
 
 const getSemanticResults = async (query: string) => {
     const tokens = await getTensorFromText(query);
