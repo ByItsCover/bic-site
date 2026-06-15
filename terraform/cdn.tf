@@ -32,6 +32,12 @@ resource "aws_cloudfront_distribution" "cdn" {
     viewer_protocol_policy   = "redirect-to-https"
   }
 
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/${var.site_bucket_index_doc}"
+  }
+
   price_class = "PriceClass_100"
 
   restrictions {
