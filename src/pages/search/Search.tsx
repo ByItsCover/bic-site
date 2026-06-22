@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { getTensorFromText } from "../../utils/tokenHelper";
 import { loadClip, loadGliner, embedTokens, extractNER } from "../../utils/modelHelper";
 import { SearchBar } from "../../components/SearchBar";
@@ -57,6 +58,9 @@ const Search = () => {
 
     return (
         <>
+            <Link to={"/recommend"}>
+                Recommend Page
+            </Link>
             <h1>Covers Library Search</h1>
             <p>Find books by vague descriptions</p>
             <hr/>
