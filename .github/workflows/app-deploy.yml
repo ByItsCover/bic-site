@@ -78,7 +78,7 @@ jobs:
           python-version: 3.13
       
       - name: Install Model dependencies
-        run: python -m pip install -r build_requirements.txt
+        run: python -m pip install --no-cache-dir -r build_requirements.txt
       
       - name: Build Model
         run: python download_model.py public/
@@ -158,12 +158,6 @@ jobs:
         uses: hashicorp/setup-terraform@v4
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      
-      - name: Testing Cache
-        run: ls
-      
-      - name: Testing Cache
-        run: ls ${{ env.TF_VAR_build_dir }}
 
       - name: Terraform Init
         run: terraform init
