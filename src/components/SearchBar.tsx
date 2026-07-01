@@ -1,4 +1,4 @@
-import { handleInputChange } from "../utils/formHelper";
+import { handleEnterPress, handleInputChange } from "../utils/formHelper";
 
 interface SearchBarProps {
     query: string;
@@ -12,9 +12,10 @@ export const SearchBar = (
 
     return (
         <form onSubmit={searchSubmit}>
-            <input
+            <textarea
                 value={query}
                 onChange={(e) => handleInputChange(e, setQuery)}
+                onKeyDown={(e) => handleEnterPress(e, searchSubmit)}
             />
         </form>
     )

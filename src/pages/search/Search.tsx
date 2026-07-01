@@ -40,7 +40,7 @@ const Search = () => {
         loadGliner();
     }, []);
 
-    const handleSearch = async (event: React.SubmitEvent<HTMLFormElement>) => {
+    const handleSearch = async (event: React.SubmitEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
         event.preventDefault();
 
         const [vectorResults, nerResults] = await Promise.all([
