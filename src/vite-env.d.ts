@@ -1,18 +1,9 @@
 interface Window {
   _env_: {
+    REGION: string;
     ENVIRONMENT: "test" | "dev" | "prod";
     LIBRARY_SEARCH_URL: string;
+    COGNITO_USER_POOL_ID: string;
+    COGNITO_CLIENT_ID: string;
   }
 }
-
-/*
-interface ImportMetaEnv {
-  readonly VITE_ENVIRONMENT: "test" | "dev" | "prod";
-  readonly VITE_SEARCH_ENDPOINT: string;
-  // more env variables...
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv
-}
-*/
