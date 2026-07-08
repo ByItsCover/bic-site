@@ -35,14 +35,20 @@ const getKeywordResults = async (query: string) => {
 const Search = () => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<BookResult[]>([]);
+    const [clipLoading, setClipLoading] = useState<boolean>(true);
+    const [glinerLoading, setGlinerLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        loadClip();
-        loadGliner();
+        loadClip().then(() => setClipLoading(false));
+        loadGliner().then(() => setGlinerLoading(false));
     }, []);
 
     const handleSearch = async (event: React.SubmitEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
         event.preventDefault();
+
+        if (clipLoading || glinerLoading) {
+            console.log("Models loading...");
+        }
 
         const [vectorResults, nerResults] = await Promise.all([
             getSemanticResults(query),
