@@ -69,3 +69,17 @@ variable "cache_ttl" {
   description = "Custom cache Time To Live in seconds"
   default     = 86400
 }
+
+variable "token_config" {
+  description = "Configuration for auth token expiration times"
+  type = object({
+    access_token  = number # Access token valid for 1 hour
+    id_token      = number # ID token valid for 1 hour
+    refresh_token = number # Refresh token valid for 30 days
+  })
+  default = {
+    access_token  = 1
+    id_token      = 1
+    refresh_token = 30
+  }
+}
