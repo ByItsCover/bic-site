@@ -6,7 +6,7 @@ interface ResultsShelfProps {
 }
 
 export const ResultsShelf = (
-    {results}: ResultsShelfProps
+    { results }: ResultsShelfProps
 ) => {
 
     const imagesArray: BookCover[] = results.map((result) =>  ({

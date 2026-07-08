@@ -5,7 +5,7 @@ interface BookProps {
 }
 
 export const Book = (
-    {details}: BookProps
+    { details }: BookProps
 ) => {
 
     return (
