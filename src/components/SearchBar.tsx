@@ -7,7 +7,7 @@ interface SearchBarProps {
 }
 
 export const SearchBar = (
-    {query, setQuery, searchSubmit}: SearchBarProps
+    { query, setQuery, searchSubmit }: SearchBarProps
 ) => {
 
     return (
