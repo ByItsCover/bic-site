@@ -49,8 +49,8 @@ resource "aws_s3_object" "site_config" {
     REGION: "${var.aws_region}",
     ENVIRONMENT: "${var.environment}",
     LIBRARY_SEARCH_URL: "${local.library_search_url}",
-    COGNITO_USER_POOL_ID: "${local.cognito_user_pool_id}"
-    COGNITO_CLIENT_ID: "${aws_cognito_user_pool_client.auth_client.id}"
+    COGNITO_USER_POOL_ID: "${local.cognito_user_pool_id}",
+    COGNITO_CLIENT_ID: "${aws_cognito_user_pool_client.auth_client.id}",
   };
   EOF
   content_type = "application/javascript"
