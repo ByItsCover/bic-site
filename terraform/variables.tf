@@ -73,13 +73,13 @@ variable "cache_ttl" {
 variable "token_config" {
   description = "Configuration for auth token expiration times"
   type = object({
-    access_token = number # Access token valid for 1 hour
-    id_token = number # ID token valid for 1 hour
+    access_token  = number # Access token valid for 1 hour
+    id_token      = number # ID token valid for 1 hour
     refresh_token = number # Refresh token valid for 30 days
   })
   default = {
-    access_token = 1
-    id_token = 1
+    access_token  = 1
+    id_token      = 1
     refresh_token = 30
   }
 }

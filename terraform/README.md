@@ -31,6 +31,7 @@ No modules.
 | [aws_acm_certificate.ssl_certificate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate) | resource |
 | [aws_acm_certificate_validation.cert_validation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate_validation) | resource |
 | [aws_cloudfront_distribution.cdn](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution) | resource |
+| [aws_cognito_user_pool_client.auth_client](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_pool_client) | resource |
 | [aws_s3_object.site_config](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [aws_s3_object.upload_site](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [cloudflare_dns_record.cert_validation](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/dns_record) | resource |
@@ -57,6 +58,7 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment Environment | `string` | n/a | yes |
 | <a name="input_site_bucket_index_doc"></a> [site\_bucket\_index\_doc](#input\_site\_bucket\_index\_doc) | Index document file name within site S3 bucket | `string` | `"index.html"` | no |
 | <a name="input_tfe_org_name"></a> [tfe\_org\_name](#input\_tfe\_org\_name) | Terraform Cloud organization name | `string` | `"ByItsCover"` | no |
+| <a name="input_token_config"></a> [token\_config](#input\_token\_config) | Configuration for auth token expiration times | <pre>object({<br/>    access_token  = number # Access token valid for 1 hour<br/>    id_token      = number # ID token valid for 1 hour<br/>    refresh_token = number # Refresh token valid for 30 days<br/>  })</pre> | <pre>{<br/>  "access_token": 1,<br/>  "id_token": 1,<br/>  "refresh_token": 30<br/>}</pre> | no |
 
 ## Outputs
 

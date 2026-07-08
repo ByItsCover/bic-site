@@ -1,12 +1,12 @@
 locals {
-  user_pool_id          = data.terraform_remote_state.bic_infra.outputs.auth_user_pool_id
+  user_pool_id = data.terraform_remote_state.bic_infra.outputs.auth_user_pool_id
 }
 
 resource "aws_cognito_user_pool_client" "auth_client" {
-  name = "bic-site-client"
+  name         = "bic-site-client"
   user_pool_id = local.user_pool_id
 
-  generate_secret     = false
+  generate_secret = false
 
   explicit_auth_flows = [
     "ALLOW_USER_SRP_AUTH",

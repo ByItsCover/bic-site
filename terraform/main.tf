@@ -5,9 +5,9 @@
 */
 
 locals {
-  bucket_id          = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
-  library_search_url = data.terraform_remote_state.bic_library_search.outputs.library_search_url
-  cognito_user_pool_id          = data.terraform_remote_state.bic_infra.outputs.auth_user_pool_id
+  bucket_id            = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
+  library_search_url   = data.terraform_remote_state.bic_library_search.outputs.library_search_url
+  cognito_user_pool_id = data.terraform_remote_state.bic_infra.outputs.auth_user_pool_id
 
   mime_map = {
     css         = "text/css"
