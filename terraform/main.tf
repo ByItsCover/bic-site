@@ -7,6 +7,7 @@
 locals {
   bucket_id          = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
   library_search_url = data.terraform_remote_state.bic_library_search.outputs.library_search_url
+  cognito_user_pool_id          = data.terraform_remote_state.bic_infra.outputs.auth_user_pool_id
 
   mime_map = {
     css         = "text/css"
@@ -45,8 +46,11 @@ resource "aws_s3_object" "site_config" {
   key          = "env-config.js"
   content      = <<EOF
   window._env_ = {
+    REGION: "${var.aws_region}",
     ENVIRONMENT: "${var.environment}",
     LIBRARY_SEARCH_URL: "${local.library_search_url}",
+    COGNITO_USER_POOL_ID: "${local.cognito_user_pool_id}"
+    COGNITO_CLIENT_ID: "${aws_cognito_user_pool_client.auth_client.id}"
   };
   EOF
   content_type = "application/javascript"
