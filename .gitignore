@@ -30,3 +30,4 @@ gliner_model/
 
 # General
 .env
+env-config.js

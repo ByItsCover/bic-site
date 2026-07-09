@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.ts";
 
 const Recommend = () => {
-    const { attributes, userLogout, error, loading } = useAuth();
+    const { user, attributes, userLogout, error, loading } = useAuth();
 
     return (
         <>
@@ -11,9 +11,14 @@ const Recommend = () => {
             </Link>
             <p>Welcome, {attributes?.username || "User"} with email {attributes?.email || "Email"} and id {attributes?.uid || "ID"}!</p>
             {error && <p style={{ color: "red" }}>{error}</p>}
-            <button onClick={userLogout} disabled={loading}>
-                {loading ? "Logging out..." : "Logout"}
-            </button>
+            {user === null ?
+                <Link to={"/login"}>
+                    Login
+                </Link> :
+                <button onClick={userLogout} disabled={loading}>
+                    {loading ? "Logging out..." : "Logout"}
+                </button>
+            }
             <h1>Recommendation Page</h1>
             <p>Under Construction</p>
         </>

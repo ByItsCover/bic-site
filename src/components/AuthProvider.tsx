@@ -53,14 +53,12 @@ const AuthProvider = (
                     errorMessage += ": " + err.message;
                 }
                 console.error(errorMessage, err);
-                setError(errorMessage);
-                setUser(null);
+                setLoading(false);
             });
     }, []);
 
     useEffect(() => {
         if (user !== null) {
-
             fetchUserAttributes()
                 .then((currentUserAttributes) => {
                     setAttributes({
@@ -75,7 +73,6 @@ const AuthProvider = (
                         errorMessage += ": " + err.message;
                     }
                     console.error(errorMessage, err);
-                    setError(errorMessage);
                     setUser(null);
                 })
                 .finally(() => setLoading(false));
@@ -113,8 +110,8 @@ const AuthProvider = (
                 password,
                 options: {
                     userAttributes: {
-                        email,
-                        uid,
+                        email: email,
+                        "custom:uid": uid,
                     },
                     autoSignIn: { enabled: true },
                 },
