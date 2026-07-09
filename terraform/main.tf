@@ -6,7 +6,7 @@
 
 locals {
   bucket_id            = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
-  recommend_url   = data.terraform_remote_state.bic_infra.outputs.recommend_url
+  recommend_url        = data.terraform_remote_state.bic_infra.outputs.recommend_url
   cognito_user_pool_id = data.terraform_remote_state.bic_infra.outputs.auth_user_pool_id
 
   mime_map = {
