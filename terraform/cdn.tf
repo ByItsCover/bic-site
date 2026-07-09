@@ -4,6 +4,7 @@ locals {
 
   access_control_id = data.terraform_remote_state.bic_infra.outputs.cf_access_control_id
   request_policy_id = data.terraform_remote_state.bic_infra.outputs.cf_request_policy_id
+  response_policy_id = data.terraform_remote_state.bic_infra.outputs.cf_response_policy_id
   cache_policy_id   = data.terraform_remote_state.bic_infra.outputs.cf_cache_policy_id
 }
 
@@ -24,6 +25,7 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   default_cache_behavior {
     origin_request_policy_id = local.request_policy_id
+    response_headers_policy_id = local.response_policy_id
     cache_policy_id          = local.cache_policy_id
     allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods           = ["GET", "HEAD", "OPTIONS"]
