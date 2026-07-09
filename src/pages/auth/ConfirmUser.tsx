@@ -1,36 +1,18 @@
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.ts";
 
 
-interface ConfirmUserProps {
-    dashboardPath: string;
-}
-
-const ConfirmUser = (
-    { dashboardPath = "/" }: Partial<ConfirmUserProps>
-) => {
-    const { userConfirm, error, setError } = useAuth();
+const ConfirmUser = () => {
+    const { userConfirm, error } = useAuth();
 
     const [username, setUsername] = useState("");
     const [code, setCode] = useState("");
 
-    const navigate = useNavigate();
-
     const handleConfirm = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setError(null);
-        try {
-            await userConfirm(username, code);
-            navigate(dashboardPath);
-        } catch (err) {
-            let errorMessage = "Failed to confirm signup";
-            if (err instanceof Error) {
-                errorMessage = err.message;
-            }
-            setError(errorMessage);
-        }
+        await userConfirm(username, code);
     };
 
     return (
