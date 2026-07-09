@@ -2,10 +2,10 @@ locals {
   site_bucket_id              = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
   site_bucket_regional_domain = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_regional_domain
 
-  access_control_id = data.terraform_remote_state.bic_infra.outputs.cf_access_control_id
-  request_policy_id = data.terraform_remote_state.bic_infra.outputs.cf_request_policy_id
+  access_control_id  = data.terraform_remote_state.bic_infra.outputs.cf_access_control_id
+  request_policy_id  = data.terraform_remote_state.bic_infra.outputs.cf_request_policy_id
   response_policy_id = data.terraform_remote_state.bic_infra.outputs.cf_response_policy_id
-  cache_policy_id   = data.terraform_remote_state.bic_infra.outputs.cf_cache_policy_id
+  cache_policy_id    = data.terraform_remote_state.bic_infra.outputs.cf_cache_policy_id
 }
 
 resource "aws_cloudfront_distribution" "cdn" {
@@ -24,14 +24,14 @@ resource "aws_cloudfront_distribution" "cdn" {
   aliases = [var.domain_name, "www.${var.domain_name}"]
 
   default_cache_behavior {
-    origin_request_policy_id = local.request_policy_id
+    origin_request_policy_id   = local.request_policy_id
     response_headers_policy_id = local.response_policy_id
-    cache_policy_id          = local.cache_policy_id
-    allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods           = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id         = "${local.site_bucket_id}-origin"
-    compress                 = true
-    viewer_protocol_policy   = "redirect-to-https"
+    cache_policy_id            = local.cache_policy_id
+    allowed_methods            = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods             = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id           = "${local.site_bucket_id}-origin"
+    compress                   = true
+    viewer_protocol_policy     = "redirect-to-https"
   }
 
   custom_error_response {
