@@ -3,7 +3,7 @@ import type { NerResult } from "../types/nerResult.ts";
 
 
 export const callLibrarySearch = async (embedding: number[], nerResults: NerResult[]) => {
-    const endpoint = window._env_.LIBRARY_SEARCH_URL + "/search"; // TODO: Do more intelligent joining
+    const endpoint = window._env_.RECOMMEND_URL + "/search"; // TODO: Do more intelligent joining
 
     try {
         const response = await fetch(endpoint, {
