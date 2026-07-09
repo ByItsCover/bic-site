@@ -1,36 +1,18 @@
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.ts";
 
 
-interface LoginProps {
-    dashboardPath: string;
-}
-
-const Login = (
-    { dashboardPath = "/" }: Partial<LoginProps>
-) => {
-    const { userLogin, error, setError } = useAuth();
+const Login = () => {
+    const { userLogin, error } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate = useNavigate();
-
     const handleLogin = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setError(null);
-        try {
-            await userLogin(email, password);
-            navigate(dashboardPath);
-        } catch (err) {
-            let errorMessage: string | null = null;
-            if (err instanceof Error) {
-                errorMessage = err.message;
-            }
-            setError(errorMessage || JSON.stringify(err));
-        }
+        await userLogin(email, password);
     };
 
     return (

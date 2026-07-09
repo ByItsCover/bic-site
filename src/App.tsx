@@ -20,8 +20,8 @@ function App() {
                   <Route path="/confirm" element={<ConfirmUser />} />
               </Route>
 
-              <Route path="/recommend" element={<Recommend />} />
-              <Route index element={<Search />} />
+              <Route index element={<Recommend />} />
+              <Route path="/search" element={<Search />} />
 
               <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Routes>

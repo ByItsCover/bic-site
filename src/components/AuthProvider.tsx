@@ -57,11 +57,11 @@ const AuthProvider = (
             setUser(currentUser); // Update user state
             navigate(dashboardPath); // Redirect after login
         } catch (err) {
-            console.error("Error logging in", err);
-            let errorMessage = "Unknown error";
+            let errorMessage = "User login failed";
             if (err instanceof Error) {
-                errorMessage = err.message;
+                errorMessage += ": " + err.message;
             }
+            console.error(errorMessage, err);
             setError(errorMessage);
             setUser(null);
         } finally {
@@ -82,24 +82,30 @@ const AuthProvider = (
             });
             navigate("/confirm"); // Go to confirmation page
         } catch (err) {
-            console.error("Error signing up", err);
-            let errorMessage = "Unknown error";
+            let errorMessage = "User signup failed";
             if (err instanceof Error) {
-                errorMessage = err.message;
+                errorMessage += ": " + err.message;
             }
+            console.error(errorMessage, err);
             setError(errorMessage);
         }
     };
 
     const userConfirm = async (username: string, code: string) => {
         try {
+            setError(null); // Reset errors
             await confirmSignUp({ username, confirmationCode: code });
             await autoSignIn(); // Automatically log in after confirmation
             const currentUser = await getCurrentUser();
             setUser(currentUser); // Update user state
             navigate(dashboardPath); // Redirect
         } catch (err) {
-            console.error("Error confirming user", err);
+            let errorMessage = "Failed to confirm signup";
+            if (err instanceof Error) {
+                errorMessage += ": " + err.message;
+            }
+            console.error(errorMessage, err);
+            setError(errorMessage);
             setUser(null);
         } finally {
             setLoading(false);
@@ -108,11 +114,17 @@ const AuthProvider = (
 
     const userLogout = async () => {
         try {
+            setError(null); // Reset errors
             await signOut();
             setUser(null); // Clear user state
             navigate("/login"); // Redirect to login page
         } catch (err) {
-            console.error("Error logging out", err);
+            let errorMessage = "Failed to log out";
+            if (err instanceof Error) {
+                errorMessage += ": " + err.message;
+            }
+            console.error(errorMessage, err);
+            setError(errorMessage);
         }
     };
 
