@@ -9,11 +9,15 @@ import {
     signOut,
     getCurrentUser,
     autoSignIn,
+    fetchUserAttributes,
 } from "aws-amplify/auth";
+import { v4 as uuidv4 } from "uuid";
+import type { UserAttributes } from "../types/userAttributes.ts";
 
 
 interface AuthContextType {
     user: AuthUser | null;
+    attributes: UserAttributes | null;
     error: string | null;
     setError:  React.Dispatch<React.SetStateAction<string | null>>;
     loading: boolean;
@@ -34,6 +38,7 @@ const AuthProvider = (
     { children, dashboardPath = "/" }: Partial<AuthProviderProps>
 ) => {
     const [user, setUser] = useState<AuthUser | null>(null);
+    const [attributes, setAttributes] = useState<UserAttributes | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -43,19 +48,48 @@ const AuthProvider = (
         getCurrentUser()
             .then((currentUser) => setUser(currentUser))
             .catch((err) => {
-                console.error(err);
+                let errorMessage = "Get User failed";
+                if (err instanceof Error) {
+                    errorMessage += ": " + err.message;
+                }
+                console.error(errorMessage, err);
+                setError(errorMessage);
                 setUser(null);
-            })
-            .finally(() => setLoading(false));
+            });
     }, []);
+
+    useEffect(() => {
+        if (user !== null) {
+
+            fetchUserAttributes()
+                .then((currentUserAttributes) => {
+                    setAttributes({
+                        username: user.username,
+                        email: currentUserAttributes.email!,
+                        uid: currentUserAttributes.uid!,
+                    });
+                })
+                .catch((err) => {
+                    let errorMessage = "User attributes fetch failed";
+                    if (err instanceof Error) {
+                        errorMessage += ": " + err.message;
+                    }
+                    console.error(errorMessage, err);
+                    setError(errorMessage);
+                    setUser(null);
+                })
+                .finally(() => setLoading(false));
+        }
+    }, [user]);
 
     const userLogin = async (username: string, password: string) => {
         try {
-            setError(null); // Reset error state
-            await signIn({ username, password }); // AWS Amplify sign-in
+            setError(null);
+            setLoading(true);
+            await signIn({ username, password });
             const currentUser = await getCurrentUser();
-            setUser(currentUser); // Update user state
-            navigate(dashboardPath); // Redirect after login
+            setUser(currentUser);
+            navigate(dashboardPath);
         } catch (err) {
             let errorMessage = "User login failed";
             if (err instanceof Error) {
@@ -71,16 +105,21 @@ const AuthProvider = (
 
     const userSignup = async (username: string, password: string, email: string) => {
         try {
-            setError(null); // Reset errors
+            setError(null);
+            setLoading(true);
+            const uid = uuidv4();
             await signUp({
                 username,
                 password,
                 options: {
-                    userAttributes: { email }, // Attach email to user
-                    autoSignIn: { enabled: true }, // Enable automatic login after signup
+                    userAttributes: {
+                        email,
+                        uid,
+                    },
+                    autoSignIn: { enabled: true },
                 },
             });
-            navigate("/confirm"); // Go to confirmation page
+            navigate("/confirm");
         } catch (err) {
             let errorMessage = "User signup failed";
             if (err instanceof Error) {
@@ -93,12 +132,13 @@ const AuthProvider = (
 
     const userConfirm = async (username: string, code: string) => {
         try {
-            setError(null); // Reset errors
+            setError(null);
+            setLoading(true);
             await confirmSignUp({ username, confirmationCode: code });
-            await autoSignIn(); // Automatically log in after confirmation
+            await autoSignIn();
             const currentUser = await getCurrentUser();
-            setUser(currentUser); // Update user state
-            navigate(dashboardPath); // Redirect
+            setUser(currentUser);
+            navigate(dashboardPath);
         } catch (err) {
             let errorMessage = "Failed to confirm signup";
             if (err instanceof Error) {
@@ -114,10 +154,11 @@ const AuthProvider = (
 
     const userLogout = async () => {
         try {
-            setError(null); // Reset errors
+            setError(null);
+            setLoading(true);
             await signOut();
-            setUser(null); // Clear user state
-            navigate("/login"); // Redirect to login page
+            setUser(null);
+            navigate("/login");
         } catch (err) {
             let errorMessage = "Failed to log out";
             if (err instanceof Error) {
@@ -132,6 +173,7 @@ const AuthProvider = (
         <AuthContext.Provider
             value={{
                 user,
+                attributes,
                 error,
                 setError,
                 loading,

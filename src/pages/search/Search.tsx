@@ -65,7 +65,7 @@ const Search = () => {
 
     return (
         <>
-            <Link to={"/recommend"}>
+            <Link to={"/"}>
                 Recommend Page
             </Link>
             <h1>Covers Library Search</h1>

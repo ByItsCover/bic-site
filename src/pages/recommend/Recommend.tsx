@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.ts";
 
 const Recommend = () => {
-    const { user, userLogout, error, loading } = useAuth();
+    const { attributes, userLogout, error, loading } = useAuth();
 
     return (
         <>
-            <Link to={"/"}>
+            <Link to={"/search"}>
                 Search Page
             </Link>
-            <p>Welcome, {user?.username || "User"}!</p>
+            <p>Welcome, {attributes?.username || "User"} with email {attributes?.email || "Email"} and id {attributes?.uid || "ID"}!</p>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <button onClick={userLogout} disabled={loading}>
                 {loading ? "Logging out..." : "Logout"}
