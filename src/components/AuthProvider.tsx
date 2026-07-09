@@ -58,25 +58,27 @@ const AuthProvider = (
     }, []);
 
     useEffect(() => {
-        if (user !== null) {
-            fetchUserAttributes()
-                .then((currentUserAttributes) => {
+        fetchUserAttributes()
+            .then((currentUserAttributes) => {
+                if (user !== null) {
                     setAttributes({
                         username: user.username,
                         email: currentUserAttributes.email!,
                         uid: currentUserAttributes["custom:uid"]!,
                     });
-                })
-                .catch((err) => {
-                    let errorMessage = "User attributes fetch failed";
-                    if (err instanceof Error) {
-                        errorMessage += ": " + err.message;
-                    }
-                    console.error(errorMessage, err);
-                    setUser(null);
-                })
-                .finally(() => setLoading(false));
-        }
+                } else {
+                    setAttributes(null);
+                }
+            })
+            .catch((err) => {
+                let errorMessage = "User attributes fetch failed";
+                if (err instanceof Error) {
+                    errorMessage += ": " + err.message;
+                }
+                console.error(errorMessage, err);
+                setAttributes(null);
+            })
+            .finally(() => setLoading(false));
     }, [user]);
 
     const userLogin = async (username: string, password: string) => {
