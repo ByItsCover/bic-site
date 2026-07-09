@@ -3,6 +3,7 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     type AuthUser,
+    type JWT,
     signIn,
     signUp,
     confirmSignUp,
@@ -10,6 +11,7 @@ import {
     getCurrentUser,
     autoSignIn,
     fetchUserAttributes,
+    fetchAuthSession,
 } from "aws-amplify/auth";
 import { v4 as uuidv4 } from "uuid";
 import type { UserAttributes } from "../types/userAttributes.ts";
@@ -26,6 +28,7 @@ interface AuthContextType {
     userSignup: (username: string, password: string, email: string) => Promise<void>;
     userConfirm: (username: string, code: string) => Promise<void>;
     userLogout: () => Promise<void>;
+    getToken: () => Promise<JWT | null>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -168,6 +171,11 @@ const AuthProvider = (
         }
     };
 
+    const getToken = async () => {
+        const session = await fetchAuthSession();
+        return session.tokens?.accessToken ?? null
+    }
+
     return (
         <AuthContext.Provider
             value={{
@@ -181,6 +189,7 @@ const AuthProvider = (
                 userSignup,
                 userConfirm,
                 userLogout,
+                getToken,
             }}
         >
             {children}
