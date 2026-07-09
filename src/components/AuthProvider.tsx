@@ -64,7 +64,7 @@ const AuthProvider = (
                     setAttributes({
                         username: user.username,
                         email: currentUserAttributes.email!,
-                        uid: currentUserAttributes.uid!,
+                        uid: currentUserAttributes["custom:uid"]!,
                     });
                 })
                 .catch((err) => {
