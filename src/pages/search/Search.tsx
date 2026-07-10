@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth.ts";
 import { getTensorFromText } from "../../utils/tokenHelper";
 import { loadClip, loadGliner, embedTokens, extractNER } from "../../utils/modelHelper";
 import { SearchBar } from "../../components/SearchBar";
@@ -10,6 +11,7 @@ import type { BookResult } from "../../types/bookResult";
 import type { NerResult } from "../../types/nerResult.ts";
 import { NER_SEARCH_LABELS } from "../../constants.ts";
 import "./search.css"
+
 
 const getSemanticResults = async (query: string) => {
     const tokens = await getTensorFromText(query);
@@ -33,6 +35,8 @@ const getKeywordResults = async (query: string) => {
 };
 
 const Search = () => {
+    const { user, getToken } = useAuth();
+
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<BookResult[]>([]);
     const [clipLoading, setClipLoading] = useState<boolean>(true);
@@ -58,7 +62,8 @@ const Search = () => {
         console.log("Vector:", vectorResults);
         console.log("NER Results:", nerResults);
 
-        const response = await callLibrarySearch(vectorResults, nerResults);
+        const token = user !== null ? await getToken() : null;
+        const response = await callLibrarySearch(vectorResults, nerResults, token);
 
         setResults(response);
     };

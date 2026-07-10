@@ -1,10 +1,9 @@
 import type { BookResult } from "../types/bookResult";
-import type { NerResult } from "../types/nerResult.ts";
 import type { JWT } from "aws-amplify/auth";
 
 
-export const callLibrarySearch = async (embedding: number[], nerResults: NerResult[], token: JWT | null) => {
-    const endpoint = window._env_.RECOMMEND_URL + "/search"; // TODO: Do more intelligent joining
+export const callSuggestApi = async (token: JWT | null) => {
+    const endpoint = window._env_.RECOMMEND_URL + "/suggest"; // TODO: Do more intelligent joining
 
     try {
         const response = await fetch(endpoint, {
@@ -13,10 +12,7 @@ export const callLibrarySearch = async (embedding: number[], nerResults: NerResu
                 "Content-Type": "application/json",
                 ... token !== null && {"Authorization": `Bearer ${token}`},
             },
-            body: JSON.stringify({
-                vector: embedding,
-                ner: nerResults
-            })
+            body: JSON.stringify({})
         });
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
