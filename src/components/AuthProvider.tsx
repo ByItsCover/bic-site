@@ -173,7 +173,7 @@ const AuthProvider = (
 
     const getToken = async () => {
         const session = await fetchAuthSession();
-        return session.tokens?.accessToken ?? null
+        return session.tokens?.idToken ?? null
     }
 
     return (
