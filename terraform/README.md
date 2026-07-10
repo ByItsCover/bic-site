@@ -63,5 +63,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cognito_pool_client_id"></a> [cognito\_pool\_client\_id](#output\_cognito\_pool\_client\_id) | Client ID for Cognito User Pool |
 | <a name="output_website_url"></a> [website\_url](#output\_website\_url) | Website URL (HTTPS) |
 <!-- END_TF_DOCS -->
