@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth.ts";
 import { getTensorFromText } from "../../utils/tokenHelper";
 import { loadClip, loadGliner, embedTokens, extractNER } from "../../utils/modelHelper";
 import { SearchBar } from "../../components/SearchBar";
@@ -10,7 +11,7 @@ import type { BookResult } from "../../types/bookResult";
 import type { NerResult } from "../../types/nerResult.ts";
 import { NER_SEARCH_LABELS } from "../../constants.ts";
 import "./search.css"
-import {useAuth} from "../../hooks/useAuth.ts";
+
 
 const getSemanticResults = async (query: string) => {
     const tokens = await getTensorFromText(query);

@@ -20,6 +20,7 @@ import type { UserAttributes } from "../types/userAttributes.ts";
 interface AuthContextType {
     user: AuthUser | null;
     attributes: UserAttributes | null;
+    getToken: () => Promise<JWT | null>;
     error: string | null;
     setError:  React.Dispatch<React.SetStateAction<string | null>>;
     loading: boolean;
@@ -28,7 +29,6 @@ interface AuthContextType {
     userSignup: (username: string, password: string, email: string) => Promise<void>;
     userConfirm: (username: string, code: string) => Promise<void>;
     userLogout: () => Promise<void>;
-    getToken: () => Promise<JWT | null>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -181,6 +181,7 @@ const AuthProvider = (
             value={{
                 user,
                 attributes,
+                getToken,
                 error,
                 setError,
                 loading,
@@ -189,7 +190,6 @@ const AuthProvider = (
                 userSignup,
                 userConfirm,
                 userLogout,
-                getToken,
             }}
         >
             {children}
