@@ -1,25 +1,21 @@
-import type { BookResult } from "../types/bookResult";
 import type { JWT } from "aws-amplify/auth";
 
 
-const callSuggestApi = async (token: JWT | null) => {
-    const endpoint = window._env_.RECOMMEND_URL + "/suggest"; // TODO: Do more intelligent joining
+export const rateBook = async (token: JWT) => {
+    const endpoint = window._env_.RECOMMEND_URL + "/suggest/rate"; // TODO: Do more intelligent joining
 
     try {
         const response = await fetch(endpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                ... token !== null && {"Authorization": `Bearer ${token}`},
+                "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({})
         });
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
-
-        const result: {covers: BookResult[]} = await response.json();
-        return result.covers;
     } catch (error) {
         let errorMessage = "Unknown error";
         if (error instanceof Error) {
@@ -30,5 +26,3 @@ const callSuggestApi = async (token: JWT | null) => {
 
     return [];
 }
-
-export default callSuggestApi;

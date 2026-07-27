@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth.ts";
 import { getTensorFromText } from "../../utils/tokenHelper";
 import { loadClip, loadGliner, embedTokens, extractNER } from "../../utils/modelHelper";
@@ -11,6 +11,7 @@ import type { BookResult } from "../../types/bookResult";
 import type { NerResult } from "../../types/nerResult.ts";
 import { NER_SEARCH_LABELS } from "../../constants.ts";
 import "./search.css"
+import {rateBook} from "../../utils/rateBook.ts";
 
 
 const getSemanticResults = async (query: string) => {
@@ -68,6 +69,19 @@ const Search = () => {
         setResults(response);
     };
 
+    const handleRating = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+        console.log("Calling rating API...");
+        const token = user !== null ? await getToken() : null;
+        if (token == null) {
+            console.error("Cannot rate as unauthenticated user");
+            return;
+        }
+
+        await rateBook(token);
+    };
+
     return (
         <>
             <Link to={"/"}>
@@ -82,6 +96,10 @@ const Search = () => {
                 setQuery={setQuery}
                 searchSubmit={handleSearch}
             />
+
+            <button onClick={handleRating}>
+                Rating Test
+            </button>
 
             <ResultsShelf results={results} />
         </>
