@@ -21,6 +21,7 @@ interface AuthContextType {
     user: AuthUser | null;
     attributes: UserAttributes | null;
     getToken: () => Promise<JWT | null>;
+    getAccessToken: () => Promise<JWT | null>;
     error: string | null;
     setError:  React.Dispatch<React.SetStateAction<string | null>>;
     loading: boolean;
@@ -176,12 +177,18 @@ const AuthProvider = (
         return session.tokens?.idToken ?? null
     }
 
+    const getAccessToken = async () => {
+        const session = await fetchAuthSession();
+        return session.tokens?.accessToken ?? null
+    }
+
     return (
         <AuthContext.Provider
             value={{
                 user,
                 attributes,
                 getToken,
+                getAccessToken,
                 error,
                 setError,
                 loading,
