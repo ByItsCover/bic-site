@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import type { JWT } from "aws-amplify/auth";
 import { useAuth } from "../../hooks/useAuth.ts";
 import { ResultsShelf } from "../../components/ResultsShelf.tsx";
-import { callSuggestApi } from "../../utils/suggestBooks.ts";
+import callSuggestApi from "../../utils/suggestBooks.ts";
 import type { BookResult } from "../../types/bookResult.ts";
 
 
