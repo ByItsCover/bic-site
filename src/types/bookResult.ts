@@ -1,18 +1,19 @@
-const RatingValues = {
-    Dislike: "Dislike",
-    Neutral: "Neutral",
-    Like: "Like",
-    Love: "Love",
-} as const;
+const RatingValues = [
+    "Dislike", "Neutral", "Like", "Love"
+] as const;
 
-type Rating = (typeof RatingValues)[keyof typeof RatingValues];
+type Rating = typeof RatingValues[number];
+
+const RatingMap = new Map(RatingValues.map((val, ind) => {
+    return [ind, val];
+}));
 
 type BookResult = {
     cover_id: number,
     cover_url: string,
     isbn_13: string,
-    rating: Rating | null,
+    rating: number | null,
 };
 
-export { RatingValues };
+export { RatingValues, RatingMap };
 export type { Rating, BookResult };

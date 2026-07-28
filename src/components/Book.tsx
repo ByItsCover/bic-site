@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import { useAuth } from "../hooks/useAuth.ts";
 import { rateBook } from "../utils/rateBook.ts";
-import { RatingValues } from "../types/bookResult";
+import { RatingValues, RatingMap } from "../types/bookResult";
 import type { BookResult, Rating } from "../types/bookResult";
 
 
@@ -19,7 +19,9 @@ const Book = (
 ) => {
     const { user, getToken } = useAuth();
 
-    const [rating, setRating] = useState(details.rating);
+    const [rating, setRating] = useState<Rating | null>(
+        details.rating !== null ? RatingMap.get(details.rating) ?? null : null
+    );
 
     const handleRating = async (event: SelectChangeEvent<Rating>) => {
         event.preventDefault();
@@ -47,7 +49,7 @@ const Book = (
                     label="Rating"
                     onChange={handleRating}
                 >
-                    {Object.values(RatingValues).map((val) => {
+                    {RatingValues.map((val) => {
                         return <MenuItem value={val}>{val}</MenuItem>
                     })}
                 </Select>
