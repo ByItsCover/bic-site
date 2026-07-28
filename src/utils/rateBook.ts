@@ -1,7 +1,8 @@
 import type { JWT } from "aws-amplify/auth";
+import type { Rating } from "../types/bookResult.ts";
 
 
-export const rateBook = async (token: JWT) => {
+export const rateBook = async (cover_id: number, rating: Rating, token: JWT) => {
     const endpoint = window._env_.RECOMMEND_URL + "/suggest/rate"; // TODO: Do more intelligent joining
 
     try {
@@ -11,7 +12,10 @@ export const rateBook = async (token: JWT) => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
             },
-            body: JSON.stringify({})
+            body: JSON.stringify({
+                cover_id: cover_id,
+                score: rating,
+            })
         });
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
