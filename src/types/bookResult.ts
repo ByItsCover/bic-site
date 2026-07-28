@@ -1,5 +1,6 @@
 const RatingValues = {
     Dislike: "Dislike",
+    Neutral: "Neutral",
     Like: "Like",
     Love: "Love",
 } as const;
