@@ -13,8 +13,10 @@ export const rateBook = async (cover_id: number, rating: Rating, token: JWT) => 
                 "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({
-                cover_id: cover_id,
-                score: rating,
+                rating: {
+                    cover_id: cover_id,
+                    score: rating,
+                }
             })
         });
         if (!response.ok) {
