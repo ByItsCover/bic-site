@@ -7,7 +7,6 @@ import { loadClip, loadGliner, embedTokens, extractNER } from "../../utils/model
 import { SearchBar } from "../../components/SearchBar";
 import { ResultsShelf } from "../../components/ResultsShelf";
 import { callLibrarySearch } from "../../utils/librarySearch";
-import { rateBook } from "../../utils/rateBook.ts";
 import type { BookResult } from "../../types/bookResult";
 import type { NerResult } from "../../types/nerResult.ts";
 import { NER_SEARCH_LABELS } from "../../constants.ts";
@@ -36,7 +35,7 @@ const getKeywordResults = async (query: string) => {
 };
 
 const Search = () => {
-    const { user, getToken, getAccessToken } = useAuth();
+    const { user, getToken } = useAuth();
 
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<BookResult[]>([]);
@@ -69,23 +68,6 @@ const Search = () => {
         setResults(response);
     };
 
-    const handleRating = async (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-
-        console.log("Calling rating API...");
-        const token = user !== null ? await getToken() : null;
-        const accessToken = user !== null ? await getAccessToken() : null;
-        if (token === null || accessToken === null) {
-            console.error("Cannot rate as unauthenticated user");
-            return;
-        }
-
-        console.log("Trying with ID token...");
-        await rateBook(token);
-        console.log("Trying with Access token...");
-        await rateBook(accessToken);
-    };
-
     return (
         <>
             <Link to={"/"}>
@@ -100,10 +82,6 @@ const Search = () => {
                 setQuery={setQuery}
                 searchSubmit={handleSearch}
             />
-
-            <button onClick={handleRating}>
-                Rating Test
-            </button>
 
             <ResultsShelf results={results} />
         </>
