@@ -8,7 +8,7 @@ import type { BookResult } from "../../types/bookResult.ts";
 
 
 const Recommend = () => {
-    const { user, attributes, getToken, userLogout, error, loading } = useAuth();
+    const { user, getToken, userLogout, error, loading } = useAuth();
 
     const [results, setResults] = useState<BookResult[]>([]);
 
@@ -30,7 +30,7 @@ const Recommend = () => {
             <Link to={"/search"}>
                 Search Page
             </Link>
-            <p>Welcome, {attributes?.username || "User"} with email {attributes?.email || "Email"} and id {attributes?.uid || "ID"}!</p>
+            <p>Welcome, {user?.username || "User"}!</p>
             {error && <p style={{ color: "red" }}>{error}</p>}
             {user === null ?
                 <Link to={"/login"}>
