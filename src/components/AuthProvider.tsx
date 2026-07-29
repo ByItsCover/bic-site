@@ -19,7 +19,7 @@ import type { UserAttributes } from "../types/userAttributes.ts";
 
 interface AuthContextType {
     user: AuthUser | null;
-    attributes: UserAttributes | null;
+    getUserAttributes: () => Promise<UserAttributes | null>;
     getToken: () => Promise<JWT | null>;
     error: string | null;
     setError:  React.Dispatch<React.SetStateAction<string | null>>;
@@ -41,7 +41,6 @@ const AuthProvider = (
     { children, dashboardPath = "/" }: Partial<AuthProviderProps>
 ) => {
     const [user, setUser] = useState<AuthUser | null>(null);
-    const [attributes, setAttributes] = useState<UserAttributes | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -59,30 +58,6 @@ const AuthProvider = (
                 setLoading(false);
             });
     }, []);
-
-    useEffect(() => {
-        fetchUserAttributes()
-            .then((currentUserAttributes) => {
-                if (user !== null) {
-                    setAttributes({
-                        username: user.username,
-                        email: currentUserAttributes.email!,
-                        uid: currentUserAttributes["custom:uid"]!,
-                    });
-                } else {
-                    setAttributes(null);
-                }
-            })
-            .catch((err) => {
-                let errorMessage = "User attributes fetch failed";
-                if (err instanceof Error) {
-                    errorMessage += ": " + err.message;
-                }
-                console.error(errorMessage, err);
-                setAttributes(null);
-            })
-            .finally(() => setLoading(false));
-    }, [user]);
 
     const userLogin = async (username: string, password: string) => {
         try {
@@ -171,16 +146,27 @@ const AuthProvider = (
         }
     };
 
+    const getUserAttributes = async () => {
+        const fetchedAttributes = await fetchUserAttributes();
+
+        const parsedAttributes: UserAttributes | null = user === null ? null : {
+            username: user.username,
+            email: fetchedAttributes.email!,
+            uid: fetchedAttributes["custom:uid"]!,
+        };
+        return parsedAttributes;
+    };
+
     const getToken = async () => {
         const session = await fetchAuthSession();
         return session.tokens?.idToken ?? null
-    }
+    };
 
     return (
         <AuthContext.Provider
             value={{
                 user,
-                attributes,
+                getUserAttributes,
                 getToken,
                 error,
                 setError,

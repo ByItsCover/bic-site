@@ -1,4 +1,3 @@
-import { useState } from "react";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -18,15 +17,12 @@ const Book = (
     { details }: BookProps
 ) => {
     const { user, getToken } = useAuth();
-
-    const [rating, setRating] = useState<Rating | null>(
-        details.rating !== null ? RatingMap.get(details.rating) ?? null : null
-    );
+    
+    const currentRating = details.rating === null ? null
+        : RatingMap.get(details.rating) ?? null;
 
     const handleRating = async (event: SelectChangeEvent<Rating>) => {
         event.preventDefault();
-
-        setRating(event.target.value);
 
         console.log("Calling rating API...");
         const token = user !== null ? await getToken() : null;
@@ -45,7 +41,7 @@ const Book = (
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={rating ?? ''}
+                    value={currentRating ?? ''}
                     label="Rating"
                     onChange={handleRating}
                 >
