@@ -56,7 +56,8 @@ const AuthProvider = (
                 }
                 console.error(errorMessage, err);
                 setLoading(false);
-            });
+            })
+            .finally(() => setLoading(false));
     }, []);
 
     const userLogin = async (username: string, password: string) => {
@@ -104,6 +105,8 @@ const AuthProvider = (
             }
             console.error(errorMessage, err);
             setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -143,6 +146,8 @@ const AuthProvider = (
             }
             console.error(errorMessage, err);
             setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
