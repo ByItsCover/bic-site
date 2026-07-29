@@ -83,7 +83,7 @@ const Search = () => {
                 searchSubmit={handleSearch}
             />
 
-            <ResultsShelf results={results} />
+            <ResultsShelf results={results} setResults={setResults} />
         </>
     )
 }

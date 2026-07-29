@@ -5,7 +5,7 @@ const RatingValues = [
 type Rating = typeof RatingValues[number];
 
 const RatingMap = new Map(RatingValues.map((val, ind) => {
-    return [ind, val];
+    return [val, ind];
 }));
 
 type BookResult = {
