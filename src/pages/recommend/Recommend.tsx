@@ -42,7 +42,7 @@ const Recommend = () => {
             }
             <h1>Recommendation Page</h1>
 
-            <ResultsShelf results={results} />
+            <ResultsShelf results={results} setResults={setResults} />
 
             <p>Under Construction</p>
         </>

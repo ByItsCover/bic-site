@@ -5,24 +5,27 @@ import Select from '@mui/material/Select';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import { useAuth } from "../hooks/useAuth.ts";
 import { rateBook } from "../utils/rateBook.ts";
-import { RatingValues, RatingMap } from "../types/bookResult";
+import { RatingValues } from "../types/bookResult";
 import type { BookResult, Rating } from "../types/bookResult";
 
 
 interface BookProps {
     details: BookResult;
+    ratingUpdate: (cover_id: number, rating: Rating) => void;
 }
 
 const Book = (
-    { details }: BookProps
+    { details, ratingUpdate }: BookProps
 ) => {
     const { user, getToken } = useAuth();
-    
+
     const currentRating = details.rating === null ? null
-        : RatingMap.get(details.rating) ?? null;
+        : RatingValues[details.rating] ?? null;
 
     const handleRating = async (event: SelectChangeEvent<Rating>) => {
         event.preventDefault();
+
+        ratingUpdate(details.cover_id, event.target.value);
 
         console.log("Calling rating API...");
         const token = user !== null ? await getToken() : null;
