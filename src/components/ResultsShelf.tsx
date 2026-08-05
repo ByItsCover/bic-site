@@ -21,7 +21,7 @@ export const ResultsShelf = (
         });
         setResults(updatedResults);
     }
-    
+
     return (
         <div className="book-grid">
             {results.map((book) => {

@@ -23,11 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Python Build (temporary)
-clenv/
-clip_model/
-gliner_model/
-
 # General
 .env
 env-config.js
