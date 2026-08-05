@@ -1,9 +1,8 @@
 import type { BookResult } from "../types/bookResult";
-import type { NerResult } from "../types/nerResult.ts";
 import type { JWT } from "aws-amplify/auth";
 
 
-export const callLibrarySearch = async (embedding: number[], nerResults: NerResult[], token: JWT | null) => {
+export const callLibrarySearch = async (query: string, token: JWT | null) => {
     const endpoint = window._env_.RECOMMEND_URL + "/search"; // TODO: Do more intelligent joining
 
     try {
@@ -14,8 +13,7 @@ export const callLibrarySearch = async (embedding: number[], nerResults: NerResu
                 ... token !== null && {"Authorization": `Bearer ${token}`},
             },
             body: JSON.stringify({
-                vector: embedding,
-                ner: nerResults
+                query: query
             })
         });
         if (!response.ok) {
