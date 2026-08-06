@@ -87,11 +87,12 @@ const AuthProvider = (
             setLoading(true);
             const uid = uuidv4();
             await signUp({
-                username,
+                username: email,
                 password,
                 options: {
                     userAttributes: {
                         email: email,
+                        preferred_username: username,
                         "custom:uid": uid,
                     },
                     autoSignIn: true,
@@ -110,11 +111,11 @@ const AuthProvider = (
         }
     };
 
-    const userConfirm = async (username: string, code: string) => {
+    const userConfirm = async (email: string, code: string) => {
         try {
             setError(null);
             setLoading(true);
-            await confirmSignUp({ username, confirmationCode: code });
+            await confirmSignUp({ username: email, confirmationCode: code });
             await autoSignIn();
             const currentUser = await getCurrentUser();
             setUser(currentUser);
