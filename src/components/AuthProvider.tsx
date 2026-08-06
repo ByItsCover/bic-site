@@ -94,7 +94,7 @@ const AuthProvider = (
                         email: email,
                         "custom:uid": uid,
                     },
-                    autoSignIn: { enabled: true },
+                    autoSignIn: true,
                 },
             });
             navigate("/confirm");

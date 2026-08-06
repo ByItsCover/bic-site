@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import type { JWT } from "aws-amplify/auth";
 import { useAuth } from "../../hooks/useAuth.ts";
+import UserDetails from "../../components/UserDetails.tsx";
 import { ResultsShelf } from "../../components/ResultsShelf.tsx";
 import callSuggestApi from "../../utils/suggestBooks.ts";
 import type { BookResult } from "../../types/bookResult.ts";
@@ -30,16 +31,12 @@ const Recommend = () => {
             <Link to={"/search"}>
                 Search Page
             </Link>
-            <p>Welcome, {user?.username || "User"}!</p>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {user === null ?
-                <Link to={"/login"}>
-                    Login
-                </Link> :
-                <button onClick={userLogout} disabled={loading}>
-                    {loading ? "Logging out..." : "Logout"}
-                </button>
-            }
+            <UserDetails
+                user={user}
+                logoutCall={userLogout}
+                loadingStatus={loading}
+                errorMessage={error}
+            />
             <h1>Recommendation Page</h1>
 
             <ResultsShelf results={results} setResults={setResults} />

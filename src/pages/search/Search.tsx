@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth.ts";
+import UserDetails from "../../components/UserDetails.tsx";
 import { SearchBar } from "../../components/SearchBar";
 import { ResultsShelf } from "../../components/ResultsShelf";
 import { callLibrarySearch } from "../../utils/librarySearch";
@@ -10,7 +11,7 @@ import "./search.css"
 
 
 const Search = () => {
-    const { user, getToken } = useAuth();
+    const { user, getToken, userLogout, error, loading } = useAuth();
 
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<BookResult[]>([]);
@@ -29,6 +30,12 @@ const Search = () => {
             <Link to={"/"}>
                 Recommend Page
             </Link>
+            <UserDetails
+                user={user}
+                logoutCall={userLogout}
+                loadingStatus={loading}
+                errorMessage={error}
+            />
             <h1>Covers Library Search</h1>
             <p>Find books by vague descriptions</p>
             <hr/>
