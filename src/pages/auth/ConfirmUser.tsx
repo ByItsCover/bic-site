@@ -22,7 +22,7 @@ const ConfirmUser = () => {
                 <input
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Email"
+                    placeholder="Username"
                     required
                 />
                 <input
