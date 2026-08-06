@@ -7,12 +7,12 @@ import { useAuth } from "../../hooks/useAuth.ts";
 const ConfirmUser = () => {
     const { userConfirm, error } = useAuth();
 
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [code, setCode] = useState("");
 
     const handleConfirm = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await userConfirm(username, code);
+        await userConfirm(email, code);
     };
 
     return (
@@ -20,9 +20,9 @@ const ConfirmUser = () => {
             <h2>Confirm Signup</h2>
             <form onSubmit={handleConfirm}>
                 <input
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Username"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
                     required
                 />
                 <input
