@@ -14,6 +14,10 @@ const Recommend = () => {
     const [results, setResults] = useState<BookResult[]>([]);
 
     useEffect(() => {
+        if (loading) {
+            return;
+        }
+
         getToken()
             .then(async (token) => {
                 let currentToken: JWT | null = null;
@@ -23,8 +27,8 @@ const Recommend = () => {
 
                 const response = await callSuggestApi(currentToken);
                 setResults(response);
-            })
-    }, [user, getToken]);
+            });
+    }, [user, loading, getToken]);
 
     return (
         <>
