@@ -31,4 +31,4 @@ export const callLibrarySearch = async (query: string, token: JWT | null) => {
     }
 
     return [];
-}
+};
