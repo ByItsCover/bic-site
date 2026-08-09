@@ -12,6 +12,7 @@ import {
     autoSignIn,
     fetchUserAttributes,
     fetchAuthSession,
+    updateUserAttributes,
 } from "aws-amplify/auth";
 import { v4 as uuidv4 } from "uuid";
 import type { UserAttributes } from "../types/userAttributes.ts";
@@ -41,6 +42,7 @@ const AuthProvider = (
     { children, dashboardPath = "/" }: Partial<AuthProviderProps>
 ) => {
     const [user, setUser] = useState<AuthUser | null>(null);
+    const [userName, setUserName] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -92,12 +94,12 @@ const AuthProvider = (
                 options: {
                     userAttributes: {
                         email: email,
-                        preferred_username: username,
                         "custom:uid": uid,
                     },
                     autoSignIn: true,
                 },
             });
+            setUserName(username);
             navigate("/confirm");
         } catch (err) {
             let errorMessage = "User signup failed";
@@ -117,6 +119,11 @@ const AuthProvider = (
             setLoading(true);
             await confirmSignUp({ username: email, confirmationCode: code });
             await autoSignIn();
+            await updateUserAttributes({
+                userAttributes: {
+                    preferred_username: userName!
+                }
+            });
             const currentUser = await getCurrentUser();
             setUser(currentUser);
             navigate(dashboardPath);
@@ -156,7 +163,7 @@ const AuthProvider = (
         const fetchedAttributes = await fetchUserAttributes();
 
         const parsedAttributes: UserAttributes | null = user === null ? null : {
-            username: user.username,
+            username: fetchedAttributes.preferred_username!,
             email: fetchedAttributes.email!,
             uid: fetchedAttributes["custom:uid"]!,
         };
