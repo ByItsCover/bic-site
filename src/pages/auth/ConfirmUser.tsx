@@ -7,24 +7,17 @@ import { useAuth } from "../../hooks/useAuth.ts";
 const ConfirmUser = () => {
     const { userConfirm, error } = useAuth();
 
-    const [email, setEmail] = useState("");
     const [code, setCode] = useState("");
 
     const handleConfirm = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await userConfirm(email, code);
+        await userConfirm(code);
     };
 
     return (
         <div className="form-container">
             <h2>Confirm Signup</h2>
             <form onSubmit={handleConfirm}>
-                <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    required
-                />
                 <input
                     value={code}
                     onChange={(e) => setCode(e.target.value)}

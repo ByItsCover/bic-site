@@ -28,7 +28,7 @@ interface AuthContextType {
     setLoading:  React.Dispatch<React.SetStateAction<boolean>>;
     userLogin: (username: string, password: string) => Promise<void>;
     userSignup: (username: string, password: string, email: string) => Promise<void>;
-    userConfirm: (username: string, code: string) => Promise<void>;
+    userConfirm: (code: string) => Promise<void>;
     userLogout: () => Promise<void>;
 }
 
@@ -42,6 +42,7 @@ const AuthProvider = (
     { children, dashboardPath = "/" }: Partial<AuthProviderProps>
 ) => {
     const [user, setUser] = useState<AuthUser | null>(null);
+    const [uid, setUid] = useState<string | null>(null);
     const [userName, setUserName] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -87,14 +88,15 @@ const AuthProvider = (
         try {
             setError(null);
             setLoading(true);
-            const uid = uuidv4();
+            const new_uid = uuidv4();
+            setUid(new_uid);
             await signUp({
-                username: uid,
+                username: new_uid,
                 password,
                 options: {
                     userAttributes: {
                         email: email,
-                        "custom:uid": uid,
+                        "custom:uid": new_uid,
                     },
                     autoSignIn: true,
                 },
@@ -113,11 +115,11 @@ const AuthProvider = (
         }
     };
 
-    const userConfirm = async (email: string, code: string) => {
+    const userConfirm = async (code: string) => {
         try {
             setError(null);
             setLoading(true);
-            await confirmSignUp({ username: email, confirmationCode: code });
+            await confirmSignUp({ username: uid!, confirmationCode: code });
             await autoSignIn();
             await updateUserAttributes({
                 userAttributes: {
