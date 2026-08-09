@@ -5,9 +5,9 @@
 */
 
 locals {
-  bucket_id     = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
-  recommend_url = data.terraform_remote_state.bic_infra.outputs.recommend_url
-  #cognito_user_pool_id = data.terraform_remote_state.bic_infra.outputs.auth_user_pool_id
+  bucket_id            = data.terraform_remote_state.bic_infra.outputs.s3_site_bucket_id
+  recommend_url        = data.terraform_remote_state.bic_infra.outputs.recommend_url
+  cognito_user_pool_id = data.terraform_remote_state.bic_infra.outputs.auth_user_pool_id
 
   mime_map = {
     css         = "text/css"
@@ -49,6 +49,8 @@ resource "aws_s3_object" "site_config" {
     REGION: "${var.aws_region}",
     ENVIRONMENT: "${var.environment}",
     RECOMMEND_URL: "${local.recommend_url}",
+    COGNITO_USER_POOL_ID: "${local.cognito_user_pool_id}",
+    COGNITO_CLIENT_ID: "${aws_cognito_user_pool_client.auth_client.id}",
   };
   EOF
   content_type = "application/javascript"
