@@ -31,6 +31,7 @@ No modules.
 | [aws_acm_certificate.ssl_certificate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate) | resource |
 | [aws_acm_certificate_validation.cert_validation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate_validation) | resource |
 | [aws_cloudfront_distribution.cdn](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution) | resource |
+| [aws_cognito_user_pool_client.auth_client](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cognito_user_pool_client) | resource |
 | [aws_s3_object.site_config](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [aws_s3_object.upload_site](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [cloudflare_dns_record.cert_validation](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/dns_record) | resource |
@@ -62,5 +63,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cognito_pool_client_id"></a> [cognito\_pool\_client\_id](#output\_cognito\_pool\_client\_id) | Client ID for Cognito User Pool |
 | <a name="output_website_url"></a> [website\_url](#output\_website\_url) | Website URL (HTTPS) |
 <!-- END_TF_DOCS -->
