@@ -87,7 +87,7 @@ const AuthProvider = (
             setLoading(true);
             const uid = uuidv4();
             await signUp({
-                username: email,
+                username: uid,
                 password,
                 options: {
                     userAttributes: {
