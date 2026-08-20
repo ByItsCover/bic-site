@@ -7,12 +7,10 @@ const suggestBooks = async (token: JWT | null) => {
 
     try {
         const response = await fetch(endpoint, {
-            method: "POST",
+            method: "GET",
             headers: {
-                "Content-Type": "application/json",
                 ... token !== null && {"Authorization": `Bearer ${token}`},
             },
-            body: JSON.stringify({})
         });
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
@@ -69,7 +67,6 @@ const deleteRating = async (cover_id: number, token: JWT) => {
         const response = await fetch(endpoint, {
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
             },
         });
