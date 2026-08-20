@@ -1,5 +1,5 @@
 const RatingValues = [
-    "Dislike", "Neutral", "Like", "Love"
+    "Dislike", "Like", "Love"
 ] as const;
 
 type Rating = typeof RatingValues[number];
