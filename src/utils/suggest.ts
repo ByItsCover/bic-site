@@ -9,7 +9,6 @@ const suggestBooks = async (token: JWT | null) => {
         const response = await fetch(endpoint, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
                 ... token !== null && {"Authorization": `Bearer ${token}`},
             },
         });
@@ -68,7 +67,6 @@ const deleteRating = async (cover_id: number, token: JWT) => {
         const response = await fetch(endpoint, {
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
             },
         });
