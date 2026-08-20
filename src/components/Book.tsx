@@ -55,7 +55,8 @@ const Book = (
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    {RatingValues.map((val) => {
+                    {RatingValues.filter(val => val !== "Neutral")
+                        .map(val => {
                         return <MenuItem value={val}>{val}</MenuItem>
                     })}
                 </Select>
