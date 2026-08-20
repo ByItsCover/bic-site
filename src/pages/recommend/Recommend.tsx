@@ -4,7 +4,7 @@ import type { JWT } from "aws-amplify/auth";
 import { useAuth } from "../../hooks/useAuth.ts";
 import UserDetails from "../../components/UserDetails.tsx";
 import { ResultsShelf } from "../../components/ResultsShelf.tsx";
-import callSuggestApi from "../../utils/suggestBooks.ts";
+import { suggestBooks } from "../../utils/suggest.ts";
 import type { BookResult } from "../../types/bookResult.ts";
 
 
@@ -25,7 +25,7 @@ const Recommend = () => {
                     currentToken = token;
                 }
 
-                const response = await callSuggestApi(currentToken);
+                const response = await suggestBooks(currentToken);
                 setResults(response);
             });
     }, [user, loading, getToken]);

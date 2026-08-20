@@ -4,14 +4,14 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import { useAuth } from "../hooks/useAuth.ts";
-import { rateBook } from "../utils/rateBook.ts";
+import { rateBook, deleteRating } from "../utils/suggest.ts";
 import { RatingValues } from "../types/bookResult";
 import type { BookResult, Rating } from "../types/bookResult";
 
 
 interface BookProps {
     details: BookResult;
-    ratingUpdate: (cover_id: number, rating: Rating) => void;
+    ratingUpdate: (cover_id: number, rating: Rating | "") => void;
 }
 
 const Book = (
@@ -19,10 +19,10 @@ const Book = (
 ) => {
     const { user, getToken } = useAuth();
 
-    const currentRating = details.rating === null ? null
-        : RatingValues[details.rating] ?? null;
+    const currentRating = details.rating === null ? ""
+        : RatingValues[details.rating] ?? "";
 
-    const handleRating = async (event: SelectChangeEvent<Rating>) => {
+    const handleRating = async (event: SelectChangeEvent<Rating | "">) => {
         event.preventDefault();
 
         ratingUpdate(details.cover_id, event.target.value);
@@ -34,7 +34,11 @@ const Book = (
             return;
         }
 
-        await rateBook(details.cover_id, event.target.value, token);
+        if (event.target.value !== "") {
+            await rateBook(details.cover_id, event.target.value, token);
+        } else {
+            await deleteRating(details.cover_id, token);
+        }
     };
 
     return (
@@ -44,10 +48,13 @@ const Book = (
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={currentRating ?? ''}
+                    value={currentRating}
                     label="Rating"
                     onChange={handleRating}
                 >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
                     {RatingValues.map((val) => {
                         return <MenuItem value={val}>{val}</MenuItem>
                     })}
