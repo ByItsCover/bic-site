@@ -7,12 +7,11 @@ const suggestBooks = async (token: JWT | null) => {
 
     try {
         const response = await fetch(endpoint, {
-            method: "POST",
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 ... token !== null && {"Authorization": `Bearer ${token}`},
             },
-            body: JSON.stringify({})
         });
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
