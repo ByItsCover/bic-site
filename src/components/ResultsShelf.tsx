@@ -12,11 +12,11 @@ interface ResultsShelfProps {
 export const ResultsShelf = (
     { results, setResults }: ResultsShelfProps
 ) => {
-    const handleRatingUpdate = (cover_id: number, rating: Rating) => {
+    const handleRatingUpdate = (cover_id: number, rating: Rating | "") => {
         const updatedResults = results.map((res) => {
             return res.cover_id === cover_id ? {
                 ...res,
-                rating: RatingMap.get(rating) ?? null
+                rating: rating == "" ? null : RatingMap.get(rating) ?? null
             } : res
         });
         setResults(updatedResults);
