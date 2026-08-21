@@ -30,6 +30,14 @@ const NavBar = () => {
         getUserAttributes()
             .then((attributes) => {
                 setUserName(attributes?.username ?? null);
+            })
+            .catch((err) => {
+                let errorMessage = "Get user attributes failed";
+                if (err instanceof Error) {
+                    errorMessage += ": " + err.message;
+                }
+                console.error(errorMessage, err);
+                setUserName(null);
             });
     }, [user, loading]);
 
