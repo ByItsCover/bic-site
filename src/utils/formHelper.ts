@@ -2,7 +2,7 @@ import * as React from "react";
 
 
 const handleInputChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement, HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement, HTMLTextAreaElement | HTMLInputElement>,
     setState: React.Dispatch<React.SetStateAction<string>>
 ) => {
 
@@ -10,8 +10,8 @@ const handleInputChange = (
 };
 
 const handleEnterPress = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>,
-    searchSubmit: React.EventHandler<React.SubmitEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>>
+    event: React.KeyboardEvent<HTMLDivElement>,
+    searchSubmit: React.EventHandler<React.SubmitEvent<HTMLFormElement> | React.KeyboardEvent<HTMLDivElement>>
 ) => {
     if (event.key === 'Enter' && !event.shiftKey) {
         searchSubmit(event);

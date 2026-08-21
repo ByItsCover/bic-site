@@ -46,12 +46,12 @@
     justify-content: flex-start;
     flex: 1;
     gap: 10px;
-    margin-right: auto !important;
 }
 
 .menu-right {
     justify-content: flex-end;
     flex: 1;
+    margin-left: auto !important;
 }
 
 .drawer-center {
@@ -74,4 +74,9 @@
 .text-load {
     width: 22vw;
     justify-content: center;
+    font-size: 1.25em;
+}
+
+.drawer-heading {
+    margin: 16px 0 !important;
 }
