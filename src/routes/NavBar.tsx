@@ -42,11 +42,11 @@ const NavBar = () => {
 
     const drawer = (
         <Box className="drawer-content" onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            {loading ? <Skeleton className="text-load" variant="text" sx={{ fontSize: '1rem' }} />
+            {loading ? <Skeleton className="text-load drawer-heading" variant="text" />
                 : <Typography
                     variant="h6"
                     component="div"
-                    sx={{ my: 2 }}
+                    className="drawer-heading"
                 >
                     Welcome{userName !== null && `, ${userName}`}!
                 </Typography>
@@ -58,7 +58,7 @@ const NavBar = () => {
                         if (info.protected && user === null) {
                             return false;
                         }
-                        return info.name !== currentPath;
+                        return info.route !== currentPath;
                     })
                     .map(info => {
                         return <ListItem key={info.name} disablePadding>
@@ -90,7 +90,7 @@ const NavBar = () => {
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        className="hamburger menu-left"
+                        className="hamburger menu-right"
                     >
                         <Menu />
                     </IconButton>
@@ -101,7 +101,7 @@ const NavBar = () => {
                                 if (info.protected && user === null) {
                                     return false;
                                 }
-                                return info.name !== currentPath;
+                                return info.route !== currentPath;
                             })
                             .map(info => (
                                 <Link key={info.name} to={info.route}>
@@ -110,7 +110,7 @@ const NavBar = () => {
                             ))}
                     </Box>
 
-                    {loading ? <Skeleton className="outside-drawer text-load" variant="text" sx={{ fontSize: '1rem' }} />
+                    {loading ? <Skeleton className="outside-drawer text-load" variant="text" />
                         : <Typography
                             variant="h6"
                             component="div"
@@ -119,7 +119,6 @@ const NavBar = () => {
                             Welcome{userName !== null && `, ${userName}`}!
                         </Typography>
                     }
-
 
                     <Box className="outside-drawer menu-right">
                         {user === null ?

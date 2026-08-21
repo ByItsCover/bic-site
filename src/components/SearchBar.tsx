@@ -1,5 +1,8 @@
 import * as React from "react";
+import { IconButton, TextField } from "@mui/material";
+import { Search } from "lucide-react";
 import { handleEnterPress, handleInputChange } from "../utils/formHelper";
+import "./search.css";
 
 
 interface SearchBarProps {
@@ -13,12 +16,20 @@ export const SearchBar = (
 ) => {
 
     return (
-        <form onSubmit={searchSubmit}>
-            <textarea
+        <form className="search-container" onSubmit={searchSubmit}>
+            <TextField
                 value={query}
                 onChange={(e) => handleInputChange(e, setQuery)}
                 onKeyDown={(e) => handleEnterPress(e, searchSubmit)}
+                multiline
             />
+            <IconButton
+                color="inherit"
+                aria-label="search covers"
+                type="submit"
+            >
+                <Search />
+            </IconButton>
         </form>
     )
 }
