@@ -8,7 +8,7 @@ import type { BookResult } from "../../types/bookResult.ts";
 
 
 const Ratings = () => {
-    const { user, getToken, userLogout, error, loading } = useAuth();
+    const { user, getToken, loading } = useAuth();
 
     const [results, setResults] = useState<BookResult[]>([]);
 
@@ -37,12 +37,7 @@ const Ratings = () => {
             <Link to={"/search"}>
                 Search Page
             </Link>
-            <UserDetails
-                user={user}
-                logoutCall={userLogout}
-                loadingStatus={loading}
-                errorMessage={error}
-            />
+            <UserDetails/>
             <h1>Ratings Page</h1>
 
             <ResultsShelf results={results} setResults={setResults} />

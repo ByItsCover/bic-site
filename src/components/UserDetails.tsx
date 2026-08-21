@@ -1,17 +1,10 @@
 import { Link } from "react-router";
-import type { AuthUser } from "aws-amplify/auth";
 import { useAuth } from "../hooks/useAuth.ts";
 import { useEffect, useState } from "react";
 
 
-interface UserDetailsProps {
-    user: AuthUser | null;
-}
-
-const UserDetails = (
-    { user }: UserDetailsProps
-) => {
-    const { getUserAttributes, userLogout, error, loading } = useAuth();
+const UserDetails = () => {
+    const { user, getUserAttributes, userLogout, error, loading } = useAuth();
 
     const [userName, setUserName] = useState<string | null>(null);
 
