@@ -41,7 +41,7 @@ const NavBar = () => {
     const currentPath = location.pathname;
 
     const drawer = (
-        <Box className="drawer-content" onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+        <Box className="drawer-content" onClick={handleDrawerToggle}>
             {loading ? <Skeleton className="text-load drawer-heading" variant="text" />
                 : <Typography
                     variant="h6"

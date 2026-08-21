@@ -6,10 +6,16 @@
     align-items: center;
 }
 
-.book-grid img {
+.book-grid .book {
+    display: flex;
     max-width: 22vh;
-    flex-grow: 3;
-    padding: 5px;
+    width: auto;
+    flex-grow: 0;
+    margin: 5px;
+}
+
+.book-grid .book img {
+    width: 100%;
 }
 
 hr {

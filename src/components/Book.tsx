@@ -20,9 +20,6 @@ const Book = (
 ) => {
     const { user, getToken } = useAuth();
 
-    const currentRating = details.rating === null ? ""
-        : RatingValues[details.rating] ?? "";
-
     const handleRating = async (event: SelectChangeEvent<Rating | "">) => {
         event.preventDefault();
 
@@ -42,9 +39,20 @@ const Book = (
         }
     };
 
+    const currentRating = details.rating === null ? ""
+        : RatingValues[details.rating] ?? "";
+    const bookUrl = `https://hardcover.app/id/book/${details.book_id}`;
+
+    const cover = (
+        <a className="book" href={bookUrl} target="_blank">
+            <img alt={`Book with ISBN13 ${details.isbn_13}`} src={details.cover_url}/>
+        </a>
+
+    );
+
     return (
-        <div>
-            {user !== null && <FormControl fullWidth>
+        <>
+            {user !== null ? <FormControl className="book" fullWidth>
                 <InputLabel id="demo-simple-select-label">Rating</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -61,9 +69,10 @@ const Book = (
                         return <MenuItem value={val}>{val}</MenuItem>
                     })}
                 </Select>
-            </FormControl>}
-            <img alt={`Book with ISBN13 ${details.isbn_13}`} src={details.cover_url}/>
-        </div>
+                {cover}
+            </FormControl>
+            : cover}
+        </>
     )
 }
 

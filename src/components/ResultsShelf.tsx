@@ -27,9 +27,11 @@ export const ResultsShelf = (
         setResults(updatedResults);
     }
 
+    const bookArr: BookResult[] | null[] = loading ? Array(expectedCount).fill(null) : results;
+
     return (
         <div className="book-grid">
-            {(loading ? Array(expectedCount).fill(null) : results).map((book: BookResult | null, ind) => {
+            {bookArr.map((book, ind) => {
                 return book !== null ? <Book
                         key={book.cover_id}
                         details={book}
