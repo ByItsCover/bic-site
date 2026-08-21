@@ -11,10 +11,11 @@ interface ResultsShelfProps {
     results: BookResult[];
     setResults:  React.Dispatch<React.SetStateAction<BookResult[]>>;
     loading: boolean;
+    expectedCount: number;
 }
 
 export const ResultsShelf = (
-    { results, setResults, loading }: ResultsShelfProps
+    { results, setResults, loading, expectedCount }: ResultsShelfProps
 ) => {
     const handleRatingUpdate = (cover_id: number, rating: Rating | "") => {
         const updatedResults = results.map((res) => {
@@ -28,7 +29,7 @@ export const ResultsShelf = (
 
     return (
         <div className="book-grid">
-            {(loading ? Array(20).fill(null) : results).map((book: BookResult | null, ind) => {
+            {(loading ? Array(expectedCount).fill(null) : results).map((book: BookResult | null, ind) => {
                 return book !== null ? <Book
                         key={book.cover_id}
                         details={book}

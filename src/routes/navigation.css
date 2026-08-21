@@ -1,0 +1,77 @@
+.outside-drawer {
+    display: none;
+}
+
+.inside-drawer {
+    display: none;
+}
+
+.hamburger {
+    margin-left: 0px !important;
+}
+
+@media (max-width: 576px) {
+    .inside-drawer {
+        display: flex;
+    }
+
+    .outside-drawer {
+        display: none !important;
+    }
+}
+
+@media (min-width: 576px) {
+    .outside-drawer {
+        display: flex;
+    }
+
+    .hamburger {
+        display: none !important;
+    }
+}
+
+.MuiDrawer-paper {
+    boxSizing: 'border-box';
+    width: 60vw;
+}
+
+.menu-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-left {
+    justify-content: flex-start;
+    flex: 1;
+    gap: 10px;
+    margin-right: auto !important;
+}
+
+.menu-right {
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.drawer-center {
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    font-size: 1.5em;
+}
+
+.drawer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.drawer-content hr {
+    width: 100%;
+}
+
+.text-load {
+    width: 22vw;
+    justify-content: center;
+}

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 import type { JWT } from "aws-amplify/auth";
 import { useAuth } from "../../hooks/useAuth.ts";
-import UserDetails from "../../components/UserDetails.tsx";
 import { ResultsShelf } from "../../components/ResultsShelf.tsx";
 import { suggestCovers } from "../../utils/suggest.ts";
 import type { BookResult } from "../../types/bookResult.ts";
@@ -34,19 +32,13 @@ const Recommend = () => {
 
     return (
         <>
-            <Link to={"/search"}>
-                Search Page
-            </Link>
-            {user !== null && <Link to={"/ratings"}>
-                Ratings Page
-            </Link>}
-            <UserDetails/>
-            <h1>Recommendation Page</h1>
+            <h1>By-Its-Cover</h1>
 
             <ResultsShelf
                 results={results}
                 setResults={setResults}
                 loading={resultsLoading}
+                expectedCount={20}
             />
         </>
     )

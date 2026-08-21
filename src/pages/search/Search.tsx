@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth.ts";
-import UserDetails from "../../components/UserDetails.tsx";
 import { SearchBar } from "../../components/SearchBar";
 import { ResultsShelf } from "../../components/ResultsShelf";
 import { pingSearch, searchCovers } from "../../utils/librarySearch";
@@ -36,13 +34,6 @@ const Search = () => {
 
     return (
         <>
-            <Link to={"/"}>
-                Recommend Page
-            </Link>
-            {user !== null && <Link to={"/ratings"}>
-                Ratings Page
-            </Link>}
-            <UserDetails/>
             <h1>Covers Library Search</h1>
             <p>Find books by vague descriptions</p>
             <hr/>
@@ -57,6 +48,7 @@ const Search = () => {
                 results={results}
                 setResults={setResults}
                 loading={resultsLoading}
+                expectedCount={10}
             />
         </>
     )
