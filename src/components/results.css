@@ -17,10 +17,6 @@ hr {
     margin-right: 0;
 }
 
-.loading-box {
-    width: 100%;
-}
-
 .loading-skeleton {
     width: 22vh !important;
     height: 28vh !important;

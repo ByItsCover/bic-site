@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth.ts";
-import UserDetails from "../../components/UserDetails.tsx";
 import { ResultsShelf } from "../../components/ResultsShelf.tsx";
 import { getRatings } from "../../utils/suggest.ts";
 import type { BookResult } from "../../types/bookResult.ts";
@@ -33,19 +31,13 @@ const Ratings = () => {
 
     return (
         <>
-            <Link to={"/"}>
-                Recommend Page
-            </Link>
-            <Link to={"/search"}>
-                Search Page
-            </Link>
-            <UserDetails/>
-            <h1>Ratings Page</h1>
+            <h1>Ratings</h1>
 
             <ResultsShelf
                 results={results}
                 setResults={setResults}
                 loading={resultsLoading}
+                expectedCount={10}
             />
         </>
     )
