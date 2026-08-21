@@ -1,13 +1,12 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth.ts";
 import UserDetails from "../../components/UserDetails.tsx";
 import { SearchBar } from "../../components/SearchBar";
 import { ResultsShelf } from "../../components/ResultsShelf";
-import { searchCovers } from "../../utils/librarySearch";
+import { pingSearch, searchCovers } from "../../utils/librarySearch";
 import type { BookResult } from "../../types/bookResult";
-import { pingSearch } from "../../utils/librarySearch.ts";
 
 
 const Search = () => {
