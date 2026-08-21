@@ -1,27 +1,41 @@
-import {Link} from "react-router";
-import type {AuthUser} from "aws-amplify/auth";
+import { Link } from "react-router";
+import type { AuthUser } from "aws-amplify/auth";
+import { useAuth } from "../hooks/useAuth.ts";
+import { useEffect, useState } from "react";
 
 
 interface UserDetailsProps {
     user: AuthUser | null;
-    logoutCall: () => Promise<void>;
-    loadingStatus: boolean;
-    errorMessage: string | null;
 }
 
 const UserDetails = (
-    { user, logoutCall, loadingStatus, errorMessage }: UserDetailsProps
+    { user }: UserDetailsProps
 ) => {
+    const { getUserAttributes, userLogout, error, loading } = useAuth();
+
+    const [userName, setUserName] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (loading) {
+            return;
+        }
+
+        getUserAttributes()
+            .then((attributes) => {
+                setUserName(attributes?.username ?? null);
+            });
+    }, [user, loading]);
+
     return (
         <>
-            <p>Welcome, {user?.username || "User"}!</p>
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            <p>Welcome, {userName || "User"}!</p>
+            {error && <p style={{ color: "red" }}>{error}</p>}
             {user === null ?
                 <Link to={"/login"}>
                     Login
                 </Link> :
-                <button onClick={logoutCall} disabled={loadingStatus}>
-                    {loadingStatus ? "Logging out..." : "Logout"}
+                <button onClick={userLogout} disabled={loading}>
+                    {loading ? "Logging out..." : "Logout"}
                 </button>
             }
         </>
