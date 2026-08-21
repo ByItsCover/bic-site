@@ -1,7 +1,8 @@
 import * as React from "react";
 import Book from "./Book.tsx"
-import { RatingMap } from "../types/bookResult";
-import type { BookResult, Rating } from "../types/bookResult";
+import { RatingMap } from "../types/rating";
+import type { Rating } from "../types/rating";
+import type { BookResult } from "../types/bookResult";
 
 
 interface ResultsShelfProps {
@@ -23,7 +24,7 @@ export const ResultsShelf = (
     }
 
     return (
-        <div className="book-grid">
+        <div>
             {results.map((book) => {
                 return <Book key={book.cover_id} details={book} ratingUpdate={handleRatingUpdate}></Book>
             })}

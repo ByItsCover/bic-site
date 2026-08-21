@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import type { JWT } from "aws-amplify/auth";
 import { useAuth } from "../../hooks/useAuth.ts";
 import UserDetails from "../../components/UserDetails.tsx";
 import { ResultsShelf } from "../../components/ResultsShelf.tsx";
-import { suggestCovers } from "../../utils/suggest.ts";
+import { getRatings } from "../../utils/suggest.ts";
 import type { BookResult } from "../../types/bookResult.ts";
 
 
-const Recommend = () => {
+const Ratings = () => {
     const { user, getToken, userLogout, error, loading } = useAuth();
 
     const [results, setResults] = useState<BookResult[]>([]);
@@ -20,35 +19,35 @@ const Recommend = () => {
 
         getToken()
             .then(async (token) => {
-                let currentToken: JWT | null = null;
-                if (user !== null && token !== null) {
-                    currentToken = token;
+                if (user === null || token === null) {
+                    console.error("Cannot fetch ratings as unauthenticated user");
+                    return;
                 }
 
-                const response = await suggestCovers(currentToken);
+                const response = await getRatings(token);
                 setResults(response);
             });
     }, [user, loading, getToken]);
 
     return (
         <>
+            <Link to={"/"}>
+                Recommend Page
+            </Link>
             <Link to={"/search"}>
                 Search Page
             </Link>
-            {user !== null && <Link to={"/ratings"}>
-                Ratings Page
-            </Link>}
             <UserDetails
                 user={user}
                 logoutCall={userLogout}
                 loadingStatus={loading}
                 errorMessage={error}
             />
-            <h1>Recommendation Page</h1>
+            <h1>Ratings Page</h1>
 
             <ResultsShelf results={results} setResults={setResults} />
         </>
     )
 }
 
-export default Recommend;
+export default Ratings;

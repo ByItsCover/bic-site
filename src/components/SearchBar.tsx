@@ -1,4 +1,6 @@
+import * as React from "react";
 import { handleEnterPress, handleInputChange } from "../utils/formHelper";
+
 
 interface SearchBarProps {
     query: string;

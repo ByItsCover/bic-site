@@ -8,7 +8,7 @@ interface ProtectedRouteProps extends React.PropsWithChildren {
 }
 
 const ProtectedRoutes = (
-    { children, redirectPath = "login" }: Partial<ProtectedRouteProps>
+    { children, redirectPath = "/" }: Partial<ProtectedRouteProps>
 ) => {
     const { user } = useAuth(); // Get current user from context
 

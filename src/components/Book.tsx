@@ -4,9 +4,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import { useAuth } from "../hooks/useAuth.ts";
-import { rateBook, deleteRating } from "../utils/suggest.ts";
-import { RatingValues } from "../types/bookResult";
-import type { BookResult, Rating } from "../types/bookResult";
+import { rateCover, deleteRating } from "../utils/suggest.ts";
+import { RatingValues } from "../types/rating";
+import type { BookResult } from "../types/bookResult";
+import type { Rating } from "../types/rating.ts";
 
 
 interface BookProps {
@@ -35,7 +36,7 @@ const Book = (
         }
 
         if (event.target.value !== "") {
-            await rateBook(details.cover_id, event.target.value, token);
+            await rateCover(details.cover_id, event.target.value, token);
         } else {
             await deleteRating(details.cover_id, token);
         }

@@ -5,6 +5,7 @@ import { AuthProvider } from "./components/AuthProvider.tsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.tsx";
 import PublicRoutes from "./routes/PublicRoutes.tsx";
 import Search from "./pages/search/Search.tsx";
+import Ratings from "./pages/ratings/Ratings.tsx";
 import Recommend from "./pages/recommend/Recommend.tsx";
 import Login from "./pages/auth/Login.tsx";
 import SignUp from "./pages/auth/SignUp.tsx";
@@ -23,7 +24,9 @@ function App() {
               <CssBaseline />
               <Routes>
                   <Route element={<ProtectedRoutes />}>
+                      <Route path="/ratings" element={<Ratings />} />
                   </Route>
+
                   <Route element={<PublicRoutes />}>
                       <Route path="/login" element={<Login />} />
                       <Route path="/signup" element={<SignUp />} />
