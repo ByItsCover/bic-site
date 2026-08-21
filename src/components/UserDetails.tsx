@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import {Box, LinearProgress} from "@mui/material";
 import { useAuth } from "../hooks/useAuth.ts";
 import { useEffect, useState } from "react";
 
@@ -21,7 +22,13 @@ const UserDetails = () => {
 
     return (
         <>
-            <p>Welcome, {userName || "User"}!</p>
+            {loading ? <Box className="loading-box">
+                    <LinearProgress aria-label="Loading..." variant="query"/>
+                </Box>
+                : <p>
+                    Welcome{userName !== null && `, ${userName}`}!
+                </p>
+            }
             {error && <p style={{ color: "red" }}>{error}</p>}
             {user === null ?
                 <Link to={"/login"}>

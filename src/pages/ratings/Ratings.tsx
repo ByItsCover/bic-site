@@ -11,6 +11,7 @@ const Ratings = () => {
     const { user, getToken, loading } = useAuth();
 
     const [results, setResults] = useState<BookResult[]>([]);
+    const [resultsLoading, setResultsLoading] = useState(true);
 
     useEffect(() => {
         if (loading) {
@@ -26,6 +27,7 @@ const Ratings = () => {
 
                 const response = await getRatings(token);
                 setResults(response);
+                setResultsLoading(false);
             });
     }, [user, loading, getToken]);
 
@@ -40,7 +42,11 @@ const Ratings = () => {
             <UserDetails/>
             <h1>Ratings Page</h1>
 
-            <ResultsShelf results={results} setResults={setResults} />
+            <ResultsShelf
+                results={results}
+                setResults={setResults}
+                loading={resultsLoading}
+            />
         </>
     )
 }

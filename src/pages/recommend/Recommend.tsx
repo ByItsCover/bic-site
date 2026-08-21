@@ -12,6 +12,7 @@ const Recommend = () => {
     const { user, getToken, loading } = useAuth();
 
     const [results, setResults] = useState<BookResult[]>([]);
+    const [resultsLoading, setResultsLoading] = useState(true);
 
     useEffect(() => {
         if (loading) {
@@ -27,6 +28,7 @@ const Recommend = () => {
 
                 const response = await suggestCovers(currentToken);
                 setResults(response);
+                setResultsLoading(false);
             });
     }, [user, loading, getToken]);
 
@@ -41,7 +43,11 @@ const Recommend = () => {
             <UserDetails/>
             <h1>Recommendation Page</h1>
 
-            <ResultsShelf results={results} setResults={setResults} />
+            <ResultsShelf
+                results={results}
+                setResults={setResults}
+                loading={resultsLoading}
+            />
         </>
     )
 }

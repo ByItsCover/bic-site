@@ -2,6 +2,25 @@ import type { BookResult } from "../types/bookResult";
 import type { JWT } from "aws-amplify/auth";
 
 
+const pingSearch = async () => {
+    const endpoint = window._env_.RECOMMEND_URL + "/search/health"; // TODO: Do more intelligent joining
+
+    try {
+        const response = await fetch(endpoint, {
+            method: "GET"
+        });
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+    } catch (error) {
+        let errorMessage = "Unknown error";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.error(errorMessage);
+    }
+};
+
 const searchCovers = async (query: string, token: JWT | null) => {
     const endpoint = window._env_.RECOMMEND_URL + "/search"; // TODO: Do more intelligent joining
 
@@ -33,4 +52,4 @@ const searchCovers = async (query: string, token: JWT | null) => {
     return [];
 };
 
-export { searchCovers };
+export { pingSearch, searchCovers };
