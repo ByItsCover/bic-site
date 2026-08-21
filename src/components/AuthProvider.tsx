@@ -148,7 +148,7 @@ const AuthProvider = (
             setLoading(true);
             await signOut();
             setUser(null);
-            navigate("/login");
+            navigate(dashboardPath);
         } catch (err) {
             let errorMessage = "Failed to log out";
             if (err instanceof Error) {

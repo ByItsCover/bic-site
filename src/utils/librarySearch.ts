@@ -2,7 +2,7 @@ import type { BookResult } from "../types/bookResult";
 import type { JWT } from "aws-amplify/auth";
 
 
-export const callLibrarySearch = async (query: string, token: JWT | null) => {
+const searchCovers = async (query: string, token: JWT | null) => {
     const endpoint = window._env_.RECOMMEND_URL + "/search"; // TODO: Do more intelligent joining
 
     try {
@@ -32,3 +32,5 @@ export const callLibrarySearch = async (query: string, token: JWT | null) => {
 
     return [];
 };
+
+export { searchCovers };

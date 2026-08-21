@@ -1,8 +1,9 @@
 import type { JWT } from "aws-amplify/auth";
-import type { BookResult, Rating } from "../types/bookResult";
+import type { BookResult } from "../types/bookResult";
+import type { Rating } from "../types/rating.ts";
 
 
-const suggestBooks = async (token: JWT | null) => {
+const suggestCovers = async (token: JWT | null) => {
     const endpoint = window._env_.RECOMMEND_URL + "/suggest"; // TODO: Do more intelligent joining
 
     try {
@@ -29,7 +30,7 @@ const suggestBooks = async (token: JWT | null) => {
     return [];
 }
 
-const rateBook = async (cover_id: number, rating: Rating, token: JWT) => {
+const rateCover = async (cover_id: number, rating: Rating, token: JWT) => {
     const endpoint = window._env_.RECOMMEND_URL + "/suggest/rate"; // TODO: Do more intelligent joining
 
     try {
@@ -49,6 +50,33 @@ const rateBook = async (cover_id: number, rating: Rating, token: JWT) => {
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
+    } catch (error) {
+        let errorMessage = "Unknown error";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.error(errorMessage);
+    }
+
+    return [];
+}
+
+const getRatings = async (token: JWT) => {
+    const endpoint = window._env_.RECOMMEND_URL + "/suggest/rate"; // TODO: Do more intelligent joining
+
+    try {
+        const response = await fetch(endpoint, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        const result: {covers: BookResult[]} = await response.json();
+        return result.covers;
     } catch (error) {
         let errorMessage = "Unknown error";
         if (error instanceof Error) {
@@ -84,4 +112,4 @@ const deleteRating = async (cover_id: number, token: JWT) => {
     return [];
 }
 
-export { suggestBooks, rateBook, deleteRating };
+export { suggestCovers, rateCover, getRatings, deleteRating };

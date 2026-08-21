@@ -5,9 +5,8 @@ import { useAuth } from "../../hooks/useAuth.ts";
 import UserDetails from "../../components/UserDetails.tsx";
 import { SearchBar } from "../../components/SearchBar";
 import { ResultsShelf } from "../../components/ResultsShelf";
-import { callLibrarySearch } from "../../utils/librarySearch";
+import { searchCovers } from "../../utils/librarySearch";
 import type { BookResult } from "../../types/bookResult";
-import "./search.css"
 
 
 const Search = () => {
@@ -20,7 +19,7 @@ const Search = () => {
         event.preventDefault();
 
         const token = user !== null ? await getToken() : null;
-        const response = await callLibrarySearch(query, token);
+        const response = await searchCovers(query, token);
 
         setResults(response);
     };
@@ -30,6 +29,9 @@ const Search = () => {
             <Link to={"/"}>
                 Recommend Page
             </Link>
+            {user !== null && <Link to={"/ratings"}>
+                Ratings Page
+            </Link>}
             <UserDetails
                 user={user}
                 logoutCall={userLogout}
