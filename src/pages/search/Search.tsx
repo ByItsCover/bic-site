@@ -1,11 +1,11 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth.ts";
 import UserDetails from "../../components/UserDetails.tsx";
 import { SearchBar } from "../../components/SearchBar";
 import { ResultsShelf } from "../../components/ResultsShelf";
-import { searchCovers } from "../../utils/librarySearch";
+import { pingSearch, searchCovers } from "../../utils/librarySearch";
 import type { BookResult } from "../../types/bookResult";
 
 
@@ -14,14 +14,24 @@ const Search = () => {
 
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<BookResult[]>([]);
+    const [resultsLoading, setResultsLoading] = useState(false);
+
+    useEffect(() => {
+        pingSearch()
+            .then(() => {
+                console.log("Library search ping complete");
+            });
+    }, []);
 
     const handleSearch = async (event: React.SubmitEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
         event.preventDefault();
 
+        setResultsLoading(true);
         const token = user !== null ? await getToken() : null;
         const response = await searchCovers(query, token);
 
         setResults(response);
+        setResultsLoading(false);
     };
 
     return (
@@ -43,7 +53,11 @@ const Search = () => {
                 searchSubmit={handleSearch}
             />
 
-            <ResultsShelf results={results} setResults={setResults} />
+            <ResultsShelf
+                results={results}
+                setResults={setResults}
+                loading={resultsLoading}
+            />
         </>
     )
 }
