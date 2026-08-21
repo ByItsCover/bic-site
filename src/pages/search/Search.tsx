@@ -10,7 +10,7 @@ import type { BookResult } from "../../types/bookResult";
 
 
 const Search = () => {
-    const { user, getToken, userLogout, error, loading } = useAuth();
+    const { user, getToken } = useAuth();
 
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<BookResult[]>([]);
@@ -32,12 +32,7 @@ const Search = () => {
             {user !== null && <Link to={"/ratings"}>
                 Ratings Page
             </Link>}
-            <UserDetails
-                user={user}
-                logoutCall={userLogout}
-                loadingStatus={loading}
-                errorMessage={error}
-            />
+            <UserDetails/>
             <h1>Covers Library Search</h1>
             <p>Find books by vague descriptions</p>
             <hr/>
