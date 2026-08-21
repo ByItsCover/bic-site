@@ -58,7 +58,6 @@ const AuthProvider = (
                     errorMessage += ": " + err.message;
                 }
                 console.error(errorMessage, err);
-                setLoading(false);
             })
             .finally(() => setLoading(false));
     }, []);
